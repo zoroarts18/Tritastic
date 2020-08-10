@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Invisible Wall
+  - coin
+  - ScreenShake
+  - UIPanel
+  - Logo
+  - UIMovement
+  - LogoUp
+  - UIDown
+  - Controller
+  - Flug
+  - MoveUIPanelDown
+  - UIPanelDown
+  - UIManager
+  - BlockSpawner
+  - Block
+  - AbilityUp
+  - GameManager
+  - SkinChanger
+  - defaultSkin
+  - polySkin
+  - batSkin
+  - jetSkin
+  - select
+  - buy
+  - Blocks
+  - Boost
+  - Particles
+  - bullet
+  - shootPowerUp
+  - BGMusic
+  - Rings
+  - RingVFX
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Debug
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
