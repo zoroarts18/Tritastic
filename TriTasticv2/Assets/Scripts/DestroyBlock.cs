@@ -18,12 +18,16 @@ public class DestroyBlock : MonoBehaviour
 
     public UIManager uiManager;
 
+    public ControlManagerScript CS;
+
     public int life;
     public bool ringCatched = false;
 
     public BackGroundMusicManagement BG;
     private void Start()
     {
+        CS = GameObject.FindWithTag("Controller").GetComponent<ControlManagerScript>();
+
         Player = GameObject.FindWithTag("Player");
 
         BG = GameObject.FindWithTag("BGMusic").GetComponent<BackGroundMusicManagement>();
@@ -34,7 +38,7 @@ public class DestroyBlock : MonoBehaviour
     {
         life--;
 
-
+        
         if (life <= 0)
         {
             if(BG.muted == false)
@@ -107,7 +111,7 @@ public class DestroyBlock : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = SpriteGreen; 
         }
 
-
+        
         if(transform.position.y < - 7f)
         {
             if(this.transform.gameObject.tag == "Rings")
@@ -131,6 +135,7 @@ public class DestroyBlock : MonoBehaviour
                 }
                 
             }
+            
             Destroy(gameObject);
         }
     }
@@ -139,7 +144,19 @@ public class DestroyBlock : MonoBehaviour
     {
         if(this.gameObject.tag == "Blocks")
         {
-            uiManager.IncrementScore();
+            if(CS.GameMode != 2)
+                uiManager.IncrementScore();
+
+
+            
+            if (CS.GameMode == 2)
+            {
+                if (BG.muted == false)
+                {
+                    FindObjectOfType<AudioManager>().Play("Block Explosion");
+                }
+                
+            }
         }
         
     }

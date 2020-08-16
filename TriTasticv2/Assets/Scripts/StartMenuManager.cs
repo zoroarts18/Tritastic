@@ -9,7 +9,7 @@ public class StartMenuManager : MonoBehaviour
     
     
     public GameObject StartMenuCanvas;
-
+    
 
 
     public Button ShopButton;

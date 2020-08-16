@@ -8,8 +8,9 @@ public class UIManager : MonoBehaviour
     private GameManager gameManager;
     private FollowFingerScript followFinger;
     private BlockSpawner blockSpawner;
-    
-    
+    public ControlManagerScript CS;
+
+    public Text newHighScoreText;
     public Text scoreText;
     public int score;
     public Text highScoretext;
@@ -37,7 +38,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        
+        //newHighScoreText.enabled = false;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         followFinger = GameObject.FindWithTag("Player").GetComponent<FollowFingerScript>();
         blockSpawner = GameObject.FindWithTag("BlockSpawner").GetComponent<BlockSpawner>();
@@ -47,16 +48,41 @@ public class UIManager : MonoBehaviour
 
     public void IncrementScore()
     {
+        
         if(gameManager.GameIsOver)
         {
             return;
         }
-        score++;        
-        if(score > PlayerPrefs.GetInt("PlayerHighScore",0))
-        {
+        score++;
 
-            PlayerPrefs.SetInt("PlayerHighScore", score);
+        if(CS.GameMode == 0)
+        {
+            if (score > PlayerPrefs.GetInt("PlayerHighScore", 0))
+            {
+
+                PlayerPrefs.SetInt("PlayerHighScore", score);
+            }
         }
+
+        if (CS.GameMode == 1)
+        {
+            if (score > PlayerPrefs.GetInt("RingsHighScore", 0))
+            {
+
+                PlayerPrefs.SetInt("RingsHighScore", score);
+            }
+        }
+
+        if (CS.GameMode == 2)
+        {
+            if (score > PlayerPrefs.GetInt("ShootHighScore", 0))
+            {
+
+                PlayerPrefs.SetInt("ShootHighScore", score);
+            }
+        }
+        
+
     }
     public int getDifficultyForScore(int score)
     {
@@ -143,7 +169,11 @@ public class UIManager : MonoBehaviour
         
     }
     public void Update()
-    {   
+    {
+        
+
+
+
         scoreText.text =  score.ToString();       
         int difficulty = getDifficultyForScore(score);
 

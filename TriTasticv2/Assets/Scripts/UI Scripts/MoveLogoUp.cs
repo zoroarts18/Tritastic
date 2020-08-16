@@ -13,13 +13,5 @@ public class MoveLogoUp : MonoBehaviour
         LogoAnim.SetTrigger("GameIsPlayed");
     }
 
-    public void changeToArcade()
-    {
-        LogoAnim.SetTrigger("switchToArcade");
-    }
-
-    public void changeToRings()
-    {
-        LogoAnim.SetTrigger("switchToRings");
-    }
+    
 }

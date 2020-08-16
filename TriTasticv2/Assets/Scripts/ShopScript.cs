@@ -9,6 +9,29 @@ public class ShopScript : MonoBehaviour
 {
     //Dieser Animator ist lediglich für den Player und nicht nötig im Normalfall. Habe einen Ninja stern skin der sich drehen sollte also brauchte ich einen animator!
 
+    public Image ShopBackGround;
+    public Image ShopSwipeArea;
+    public Image CodeBG;
+    public Button[] ShopUI;
+
+    public Color CodePanelBGRed;
+    public Color CodePanelBGGreen;
+    public Color CodePanelBGBlue;
+
+    public Color ShopBGRed;
+    public Color ShopBGGreen;
+    public Color ShopBGBlue;
+
+    public Color SwipeAreaRed;
+    public Color SwipeAreaGreen;
+    public Color SwipeAreaBlue;
+
+    public Color UIRed;
+    public Color UIGreen;
+    public Color UIBlue;
+
+
+
     public Button openCodePanelButton;
     public Button acceptCodeButton;
     public GameObject CodePanel;
@@ -63,6 +86,8 @@ public class ShopScript : MonoBehaviour
 
     void Start()
     {
+        
+
         CodeNotFoundText.enabled = false;
 
         CodePanel.SetActive(false);
@@ -80,17 +105,41 @@ public class ShopScript : MonoBehaviour
 
         if(PlayerPrefs.GetInt("Hintergrund")== 0)
         {
+            CodeBG.color = CodePanelBGRed;
             Hintergrund.GetComponent<SpriteRenderer>().sprite = HG1;
+            ShopBackGround.color = ShopBGRed;
+            ShopSwipeArea.color = SwipeAreaRed;
+
+            foreach(Button buttons in ShopUI)
+            {
+                buttons.GetComponent<Image>().color = UIRed;
+            }
         }
 
         if (PlayerPrefs.GetInt("Hintergrund") == 1)
         {
+            CodeBG.color = CodePanelBGGreen;
             Hintergrund.GetComponent<SpriteRenderer>().sprite = HG2;
+            ShopBackGround.color = ShopBGGreen;
+            ShopSwipeArea.color = SwipeAreaGreen;
+
+            foreach (Button buttons in ShopUI)
+            {
+                buttons.GetComponent<Image>().color = UIGreen;
+            }
         }
 
         if (PlayerPrefs.GetInt("Hintergrund") == 2)
         {
+            CodeBG.color = CodePanelBGBlue;
             Hintergrund.GetComponent<SpriteRenderer>().sprite = HG3;
+            ShopBackGround.color = ShopBGBlue;
+            ShopSwipeArea.color = SwipeAreaBlue;
+
+            foreach (Button buttons in ShopUI)
+            {
+                buttons.GetComponent<Image>().color = UIBlue;
+            }
         }
 
 
@@ -178,10 +227,19 @@ public class ShopScript : MonoBehaviour
 
     public void changeToHG1()
     {
+        CodeBG.color = CodePanelBGRed;
+        ShopBackGround.color = ShopBGRed;
+        ShopSwipeArea.color = SwipeAreaRed;
+
+        foreach (Button buttons in ShopUI)
+        {
+            buttons.GetComponent<Image>().color = UIRed;
+        }
+
         //Diese Methode wechselt zum ersten HG
 
         //Musik wird je nachdem ob der Spieler den Sound gemutet hat oder nicht abgespielt oder nicht abgespielt 
-        if(BG.muted == false)
+        if (BG.muted == false)
         FindObjectOfType<AudioManager>().Play("Select Sound");
 
         //Das Hintergrund Object bekommt den ersten HG Sprite zugewiesen
@@ -206,9 +264,19 @@ public class ShopScript : MonoBehaviour
 
     public void changeToHG2()
     {
+        CodeBG.color = CodePanelBGGreen;
+        ShopBackGround.color = ShopBGGreen;
+        ShopSwipeArea.color = SwipeAreaGreen;
+
+        foreach (Button buttons in ShopUI)
+        {
+            buttons.GetComponent<Image>().color = UIGreen;
+        }
+
+
         //Das selbe passiert hier nur das hier die Player Pref Int auf 1 gesetzt und das HG Objekt den 2. Skin zugewiesen bekommt
 
-        if(BG.muted == false)
+        if (BG.muted == false)
         FindObjectOfType<AudioManager>().Play("Select Sound");
 
         Hintergrund.GetComponent<SpriteRenderer>().sprite = HG2;
@@ -219,9 +287,18 @@ public class ShopScript : MonoBehaviour
 
     public void changeToHG3()
     {
+        CodeBG.color = CodePanelBGBlue;
+        ShopBackGround.color = ShopBGBlue;
+        ShopSwipeArea.color = SwipeAreaBlue;
+
+        foreach (Button buttons in ShopUI)
+        {
+            buttons.GetComponent<Image>().color = UIBlue;
+        }
+
         //Auch hier passiert das selbe nur mit Player Pref int auf 2 und HG Object HG3 
 
-        if(BG.muted == false)
+        if (BG.muted == false)
         FindObjectOfType<AudioManager>().Play("Select Sound");
 
         Hintergrund.GetComponent<SpriteRenderer>().sprite = HG3;

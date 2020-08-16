@@ -9,6 +9,7 @@ public class FollowFingerScript : MonoBehaviour
 {
     public BackGroundMusicManagement BG;
     public Sprite[] skins;
+    public GameObject controller;
 
     public Animator PlayerAnim;
 
@@ -35,6 +36,8 @@ public class FollowFingerScript : MonoBehaviour
     public bool DashUnlocked = true;
     public bool isShooting;
 
+    private bool startedShooting = false;
+
     public SpriteRenderer sr;
 
     private float deltaX, deltaY;
@@ -49,6 +52,7 @@ public class FollowFingerScript : MonoBehaviour
     private Color blue;
     void Start()
     {
+
         blue = new Color(0, 23, 79);
         green = new Color(0, 58, 0);
 
@@ -73,6 +77,21 @@ public class FollowFingerScript : MonoBehaviour
         sr.sprite = skins[PlayerPrefs.GetInt("skinSelected", 0)];
     }
     
+    public IEnumerator autoShoot()
+    {
+        while(!isDead)
+        {
+            GameObject inGameBullet = Instantiate(Bullet, new Vector2(transform.position.x, transform.position.y + 0.2f), Quaternion.identity);
+            if (BG.muted == false)
+            {
+                FindObjectOfType<AudioManager>().Play("Shoot SFX");
+            }
+
+
+
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
     public IEnumerator shoot()
     {
         while(isShooting)
@@ -91,6 +110,13 @@ public class FollowFingerScript : MonoBehaviour
     }
     public void Update()
     {
+        if(controller.GetComponent<ControlManagerScript>().GameIsPlayed == true && startedShooting == false && controller.GetComponent<ControlManagerScript>().GameMode == 2)
+        {
+            StartCoroutine(autoShoot());
+            startedShooting = true;
+        }
+
+
         if (isShooting)
         {
             ShootIndicator.enabled = true;

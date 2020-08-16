@@ -12,7 +12,8 @@ public class BlockSpawner : MonoBehaviour
     public GameObject ShootItem;
 
     public GameObject Ring;
-    
+    public GameObject Enemy;
+
     public Transform[] spawnPoints;    
 
     public GameObject blockPrefab;
@@ -69,6 +70,23 @@ public class BlockSpawner : MonoBehaviour
                         TimeToSpawnItem = Time.time + TimeBetweenItemSpawns;
                 }
 
+                if(controller.GetComponent<ControlManagerScript>().GameMode == 2)
+                {
+                    if (randomIndex != i)
+                    {
+                        //Block wird gespawnt!
+                        GameObject EnemyInGame = Instantiate(Enemy , spawnPoints[i].position, Quaternion.identity);
+                        EnemyInGame.tag = "Blocks";
+                        EnemyInGame.GetComponent<DestroyBlock>().uiManager = uiManager;
+                        EnemyInGame.GetComponent<Rigidbody2D>().velocity = new Vector2(0, -currentSpeed);
+                    }
+
+                    else
+                    {
+                        TimeToSpawnItem = Time.time + TimeBetweenItemSpawns;
+                    }
+
+                }
 
                 if(controller.GetComponent<ControlManagerScript>().GameMode == 0)
                 {
@@ -81,7 +99,9 @@ public class BlockSpawner : MonoBehaviour
                         block.GetComponent<Rigidbody2D>().velocity = new Vector2(0, -currentSpeed);
                     }
 
-                    
+                   
+
+                
 
                     else
                     {

@@ -16,10 +16,18 @@ public class PauseManagerScript : MonoBehaviour
     public Button PauseButton;
     public Button HomeButton;
     public Button ResumeButton;
+    public Button SettingsButton;
+
+    private Vector2 PausePanelStart;
+    public GameObject SettingsPanel;
 
     void Start()
     {
+        
+
+        
         PausedCanvas.SetActive(true);
+
         GameObject.Find("Background Music").GetComponent<AudioSource>().enabled = true;
         PauseButton.onClick.AddListener(pauseGame);
         HomeButton.onClick.AddListener(backToHomeMenu);
@@ -54,6 +62,8 @@ public class PauseManagerScript : MonoBehaviour
         pauseMenu.DOAnchorPos(new Vector2(-1000, 0),0.1f);
 
     }
+
+    
 
     
     public void backToHomeMenu()

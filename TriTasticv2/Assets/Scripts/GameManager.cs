@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public GameObject Player;
     public GameObject deadParticles;
     public BackGroundMusicManagement BG;
-    
+    public ControlManagerScript CS;
    
     public bool GameIsOver = false;
     public static bool gameOver = false;
@@ -48,7 +48,19 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         GameIsOver = true;
-        highscoreText.text = PlayerPrefs.GetInt("PlayerHighScore", 0).ToString();
+        if(CS.GameMode == 0)
+        {
+            highscoreText.text = PlayerPrefs.GetInt("PlayerHighScore", 0).ToString();
+        }
+        if (CS.GameMode == 1)
+        {
+            highscoreText.text = PlayerPrefs.GetInt("RingsHighScore", 0).ToString();
+        }
+        if (CS.GameMode == 2)
+        {
+            highscoreText.text = PlayerPrefs.GetInt("ShootHighScore", 0).ToString();
+        }
+
         scoreText.text = uiManager.score.ToString();
         StartCoroutine(RestartLevel());
         //Player.GetComponent<FollowFingerScript>().PlayerParticles.SetActive(false);
