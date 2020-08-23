@@ -18,12 +18,13 @@ public class FollowFingerScript : MonoBehaviour
 
     public GameObject BlueBlockParticles;
     public GameObject GreenBlockParticles;
+    public GameObject plus1;
 
     private Rigidbody2D rb;
     private Shake shake;
     public UIManager uiManager;
 
-    public float DashTime = 10f;
+    public float DashTime = 7f;
     public GameObject WindParticles;
     public GameObject goldenExplosion;
     public GameObject explosionPrefab;
@@ -46,12 +47,18 @@ public class FollowFingerScript : MonoBehaviour
     public Image BoostIndicator;
     public Image ShootIndicator;
 
+    public GameObject PowerUpBar;
+    public Slider PowerUpSlider;
+    private float Energy ;
+    private float maxEnergie = 8;
 
     private Color green;
 
     private Color blue;
     void Start()
     {
+        PowerUpBar.SetActive(false);
+
 
         blue = new Color(0, 23, 79);
         green = new Color(0, 58, 0);
@@ -116,11 +123,14 @@ public class FollowFingerScript : MonoBehaviour
             startedShooting = true;
         }
 
+        
 
         if (isShooting)
         {
             ShootIndicator.enabled = true;
             BoostIndicator.enabled = false;
+            Energy -= Time.deltaTime;
+            PowerUpSlider.value = Energy;
         }
 
         if(!isShooting)
@@ -130,8 +140,10 @@ public class FollowFingerScript : MonoBehaviour
 
         if (isDashing)
         {
+            Energy -= Time.deltaTime;
             ShootIndicator.enabled = false;
             BoostIndicator.enabled = true;
+            PowerUpSlider.value = Energy;
         }
 
         if(!isDashing )
@@ -186,7 +198,12 @@ public class FollowFingerScript : MonoBehaviour
         uiManager.resetDashSpeed();
         WindParticles.SetActive(false);
         Invoke("PlayerNotInvincible", 2f);
-        
+        Invoke("DeactivatePowerBar",1);
+    }
+
+    void DeactivatePowerBar()
+    {
+        PowerUpBar.SetActive(false);
     }
 
     public void PlayerNotInvincible()
@@ -206,6 +223,10 @@ public class FollowFingerScript : MonoBehaviour
             //BoostPanel.SetActive(true);
             //GetComponent<Renderer>().material.color = Color.gray;
             isDashing = true;
+            PowerUpBar.SetActive(true);
+            Energy = maxEnergie;
+            PowerUpSlider.value = Energy;
+
             //rb.velocity = new Vector2(0, 1f);
             uiManager.setDashSpeed();
             WindParticles.SetActive(true);
@@ -221,15 +242,21 @@ public class FollowFingerScript : MonoBehaviour
     public void stopShooting()
     {
         isShooting = false;
+        Invoke("DeactivatePowerBar", 1f);
     }
 
     public void ActivateShoot()
     {
         Debug.Log("Shoot");
         isShooting = true;
+        PowerUpBar.SetActive(true);
+        Energy = maxEnergie;
+        PowerUpSlider.value = Energy;
+
         StartCoroutine(shoot());
-        Invoke("stopShooting", 7f);
+        Invoke("stopShooting", 8f);
     }
+
     void OnCollisionEnter2D(Collision2D c11)
     {
         
@@ -240,8 +267,8 @@ public class FollowFingerScript : MonoBehaviour
             {
                 if(BG.muted== false)
                  FindObjectOfType<AudioManager>().Play("Block Explosion");
-                
-                
+
+                Instantiate(plus1,new Vector2(c11.gameObject.transform.position.x, c11.gameObject.transform.position.y +1), Quaternion.identity);
                 //shake.camShake();
                 Destroy(c11.gameObject);
                 

@@ -8,6 +8,7 @@ public class DestroyBlock : MonoBehaviour
 
     public GameObject PlayerDeathVFX;
 
+    public GameObject plus1;
     public Sprite SpriteRed;
     public Sprite SpriteGreen;
     public Sprite SpriteBlue;
@@ -24,6 +25,7 @@ public class DestroyBlock : MonoBehaviour
     public bool ringCatched = false;
 
     public BackGroundMusicManagement BG;
+    public GameObject Plus1;
     private void Start()
     {
         CS = GameObject.FindWithTag("Controller").GetComponent<ControlManagerScript>();
@@ -62,8 +64,8 @@ public class DestroyBlock : MonoBehaviour
                 Instantiate(GreenBlockExplosion , transform.position, Quaternion.identity);
             }
 
+            Instantiate(plus1, transform.position, Quaternion.identity);
 
-            
             Destroy(this.gameObject);
 
         }
@@ -82,6 +84,7 @@ public class DestroyBlock : MonoBehaviour
                 if(BG.muted == false)
                     FindObjectOfType<AudioManager>().Play("RingReached");
 
+                Instantiate(Plus1, transform.position, Quaternion.identity);
                 GetComponent<Animator>().SetTrigger("close");
                 uiManager.IncrementScore();
             }
@@ -114,7 +117,25 @@ public class DestroyBlock : MonoBehaviour
         
         if(transform.position.y < - 7f)
         {
-            if(this.transform.gameObject.tag == "Rings")
+            if(CS.GameMode == 2)
+            {
+                if (BG.muted == false)
+                {
+                    Handheld.Vibrate();
+                    
+                }
+
+                if (Player.GetComponent<FollowFingerScript>().isDead == false)
+                {
+                    Player.GetComponent<FollowFingerScript>().isDead = true;
+                    Instantiate(PlayerDeathVFX, Player.transform.position, Quaternion.identity);
+                    Player.SetActive(false);
+                    FindObjectOfType<GameManager>().EndGame();
+                }
+                   
+            }
+
+            if(this.transform.gameObject.tag == "Rings" )
             {
                 if(ringCatched == false)
                 {
@@ -123,15 +144,18 @@ public class DestroyBlock : MonoBehaviour
                         Handheld.Vibrate();
                         FindObjectOfType<AudioManager>().Play("RingMissed");
                     }
+
+
+                    if (Player.GetComponent<FollowFingerScript>().isDead == false)
+                    {
+                        Player.GetComponent<FollowFingerScript>().isDead = true;
+                        Instantiate(PlayerDeathVFX, Player.transform.position, Quaternion.identity);
+                        Player.SetActive(false);
+
+
+                        FindObjectOfType<GameManager>().EndGame();
+                    }
                         
-
-                    
-                    Player.GetComponent<FollowFingerScript>().isDead = true;
-                    Instantiate(PlayerDeathVFX, Player.transform.position, Quaternion.identity);
-                    Player.SetActive(false);
-                    
-
-                    FindObjectOfType<GameManager>().EndGame();
                 }
                 
             }

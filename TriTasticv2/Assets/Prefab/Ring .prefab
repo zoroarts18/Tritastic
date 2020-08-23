@@ -154,9 +154,11 @@ MonoBehaviour:
   blueBlockExplosion: {fileID: 0}
   GreenBlockExplosion: {fileID: 0}
   uiManager: {fileID: 0}
+  CS: {fileID: 0}
   life: 0
   ringCatched: 0
   BG: {fileID: 0}
+  Plus1: {fileID: 5114824165679310579, guid: 2562f1374dfcc594f98712ad1d5a8b28, type: 3}
 --- !u!95 &2499126212890448711
 Animator:
   serializedVersion: 3

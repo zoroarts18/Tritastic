@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     private BlockSpawner blockSpawner;
     public ControlManagerScript CS;
 
-    public Text newHighScoreText;
+    public GameObject newHighScoreText;
     public Text scoreText;
     public int score;
     public Text highScoretext;
@@ -38,7 +38,10 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        //newHighScoreText.enabled = false;
+
+        
+        newHighScoreText.SetActive(false);
+
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         followFinger = GameObject.FindWithTag("Player").GetComponent<FollowFingerScript>();
         blockSpawner = GameObject.FindWithTag("BlockSpawner").GetComponent<BlockSpawner>();
@@ -54,6 +57,7 @@ public class UIManager : MonoBehaviour
             return;
         }
         score++;
+
 
         if(CS.GameMode == 0)
         {
@@ -171,7 +175,6 @@ public class UIManager : MonoBehaviour
     public void Update()
     {
         
-
 
 
         scoreText.text =  score.ToString();       

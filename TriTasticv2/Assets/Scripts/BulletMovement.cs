@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BulletMovement : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class BulletMovement : MonoBehaviour
 
     public GameObject PlayerDeathVFX;
 
-
+    public GameObject plus1;
 
     // Update is called once per frame
     void Start()
@@ -32,7 +33,7 @@ public class BulletMovement : MonoBehaviour
             if (collision.gameObject.tag == "Blocks")
             {
                 Instantiate(PlayerDeathVFX, transform.position, Quaternion.identity);
-                
+                Instantiate(plus1, collision.gameObject.transform.position, Quaternion.identity);
                 uiManager.IncrementScore();
 
                 Destroy(this.gameObject);
@@ -45,6 +46,7 @@ public class BulletMovement : MonoBehaviour
             Debug.Log("Collision on Bullet");
             if (collision.gameObject.tag == "Blocks")
             {
+                
                 Destroy(this.gameObject);
                 collision.gameObject.GetComponent<DestroyBlock>().TakeDamage();
             }

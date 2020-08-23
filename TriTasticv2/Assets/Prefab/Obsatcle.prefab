@@ -146,6 +146,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   PlayerDeathVFX: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
     type: 3}
+  plus1: {fileID: 5114824165679310579, guid: 2562f1374dfcc594f98712ad1d5a8b28, type: 3}
   SpriteRed: {fileID: 21300000, guid: d026016d7702fe4489664e1f134f8b05, type: 3}
   SpriteGreen: {fileID: 21300000, guid: ebfe69a9f205e104185a9ad323c9c891, type: 3}
   SpriteBlue: {fileID: 21300000, guid: 77e26917592df3f4ca3747761d84bd16, type: 3}
@@ -156,6 +157,8 @@ MonoBehaviour:
   GreenBlockExplosion: {fileID: 4848173040958530609, guid: 0e4f1c2327b63654dbd365afe74b1547,
     type: 3}
   uiManager: {fileID: 0}
+  CS: {fileID: 0}
   life: 2
   ringCatched: 0
   BG: {fileID: 0}
+  Plus1: {fileID: 5114824165679310579, guid: 2562f1374dfcc594f98712ad1d5a8b28, type: 3}

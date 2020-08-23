@@ -46,9 +46,60 @@ public class ControlManagerScript : MonoBehaviour
     
     void Start()
     {
-        
 
-        if(PlayerPrefs.GetInt("Quality") == 1)
+
+        Debug.Log(PlayerPrefs.GetInt("GameMode"));
+
+
+        if (PlayerPrefs.GetInt("GameMode") == 0)
+        {
+            GameModeText.text = "Arcade";
+            GameMode = 0;
+            currentHighscoreText.text = PlayerPrefs.GetInt("PlayerHighScore", 0).ToString();
+            changeToArcadeButton.enabled = false;
+            changeToArcadeButton.GetComponent<Image>().enabled = false;
+
+            changeToRingsButton.enabled = true;
+            changeToRingsButton.GetComponent<Image>().enabled = true;
+        }
+
+        if (PlayerPrefs.GetInt("GameMode") == 1)
+        {
+            GameModeText.text = "Rings";
+            GameMode = 1;
+            currentHighscoreText.text = PlayerPrefs.GetInt("RingsHighScore", 0).ToString();
+            changeToArcadeButton.enabled = true;
+            changeToArcadeButton.GetComponent<Image>().enabled = true;
+
+            changeToRingsButton.enabled = true;
+            changeToRingsButton.GetComponent<Image>().enabled = true;
+        }
+
+        if (PlayerPrefs.GetInt("GameMode") == 2)
+        {
+            GameModeText.text = "Shoot";
+            GameMode = 2;
+            changeToArcadeButton.enabled = true;
+            changeToArcadeButton.GetComponent<Image>().enabled = true;
+
+            changeToRingsButton.enabled = false;
+            changeToRingsButton.GetComponent<Image>().enabled = false;
+
+            currentHighscoreText.text = PlayerPrefs.GetInt("ShootHighScore", 0).ToString();
+            spawnPointLeft.transform.position = new Vector2(-1.98f, 8.68f);
+            spawnPointRight.transform.position = new Vector2(2.02f, 8.68f);
+            spawnPointMid.transform.position = new Vector2(0.04f, 6.53f);
+        }
+
+        else
+        {
+            spawnPointLeft.transform.position = new Vector2(-1.98f, 6.53f);
+            spawnPointRight.transform.position = new Vector2(2.02f, 6.53f);
+            spawnPointMid.transform.position = new Vector2(0.04f, 8.68f);
+        }
+
+
+        if (PlayerPrefs.GetInt("Quality") == 1)
         {
             Camera.main.GetComponent<PostProcessVolume>().enabled = false;
             QualityChanger.value = 1;
@@ -66,7 +117,7 @@ public class ControlManagerScript : MonoBehaviour
         openSettingsButton.onClick.AddListener(openSettings);
         closeSettingsButton.onClick.AddListener(closeSettings);
 
-        GameMode = 0;
+        //GameMode = 0;
 
         changeToArcadeButton.onClick.AddListener(switchLeft);
         changeToRingsButton.onClick.AddListener(switchRight);
@@ -172,6 +223,7 @@ public class ControlManagerScript : MonoBehaviour
         if (BG.muted == false)
             FindObjectOfType<AudioManager>().Play("Select Sound");
 
+        PlayerPrefs.SetInt("GameMode", 2);
         GameModeText.text = "Shoot";
         GameMode = 2;
     }
@@ -181,6 +233,7 @@ public class ControlManagerScript : MonoBehaviour
         if (BG.muted == false)
             FindObjectOfType<AudioManager>().Play("Select Sound");
 
+        PlayerPrefs.SetInt("GameMode", 1);
         GameModeText.text = "Rings";
         GameMode = 1;
     }
@@ -190,6 +243,7 @@ public class ControlManagerScript : MonoBehaviour
         if(BG.muted == false)
             FindObjectOfType<AudioManager>().Play("Select Sound");
 
+        PlayerPrefs.SetInt("GameMode", 0);
         GameModeText.text = "Arcade";
         GameMode = 0;
     }
@@ -199,6 +253,7 @@ public class ControlManagerScript : MonoBehaviour
         if (BG.muted == false)
             FindObjectOfType<AudioManager>().Play("Select Sound");
 
+        PlayerPrefs.SetInt("GameMode", 1);
         GameModeText.text = "Rings";
         GameMode = 1;
     }
