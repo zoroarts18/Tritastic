@@ -64,7 +64,7 @@ public class DestroyBlock : MonoBehaviour
                 Instantiate(GreenBlockExplosion , transform.position, Quaternion.identity);
             }
 
-            Instantiate(plus1, transform.position, Quaternion.identity);
+            Instantiate(plus1, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
 
             Destroy(this.gameObject);
 
@@ -84,7 +84,7 @@ public class DestroyBlock : MonoBehaviour
                 if(BG.muted == false)
                     FindObjectOfType<AudioManager>().Play("RingReached");
 
-                Instantiate(Plus1, transform.position, Quaternion.identity);
+                Instantiate(Plus1, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
                 GetComponent<Animator>().SetTrigger("close");
                 uiManager.IncrementScore();
             }

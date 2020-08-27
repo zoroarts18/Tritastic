@@ -268,7 +268,7 @@ public class FollowFingerScript : MonoBehaviour
                 if(BG.muted== false)
                  FindObjectOfType<AudioManager>().Play("Block Explosion");
 
-                Instantiate(plus1,new Vector2(c11.gameObject.transform.position.x, c11.gameObject.transform.position.y +1), Quaternion.identity);
+                Instantiate(plus1,new Vector3 (c11.gameObject.transform.position.x, c11.gameObject.transform.position.y +1, -1 ), Quaternion.identity);
                 //shake.camShake();
                 Destroy(c11.gameObject);
                 

@@ -33,7 +33,7 @@ public class BulletMovement : MonoBehaviour
             if (collision.gameObject.tag == "Blocks")
             {
                 Instantiate(PlayerDeathVFX, transform.position, Quaternion.identity);
-                Instantiate(plus1, collision.gameObject.transform.position, Quaternion.identity);
+                Instantiate(plus1, new Vector3(collision.gameObject.transform.position.x, collision.gameObject.transform.position.y , -1), Quaternion.identity);
                 uiManager.IncrementScore();
 
                 Destroy(this.gameObject);
