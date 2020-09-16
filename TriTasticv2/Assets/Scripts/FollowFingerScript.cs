@@ -53,10 +53,15 @@ public class FollowFingerScript : MonoBehaviour
     private float maxEnergie = 8;
 
     private Color green;
+    private Vector3 mousePos;
 
     private Color blue;
+
+    private bool touchDetected;
     void Start()
     {
+        touchDetected = false;
+
         PowerUpBar.SetActive(false);
 
 
@@ -117,12 +122,24 @@ public class FollowFingerScript : MonoBehaviour
     }
     public void Update()
     {
+        if(Input.GetMouseButton(0) && touchDetected == false)
+        {
+            touchDetected = true;
+        }
+
         if(controller.GetComponent<ControlManagerScript>().GameIsPlayed == true && startedShooting == false && controller.GetComponent<ControlManagerScript>().GameMode == 2)
         {
             StartCoroutine(autoShoot());
             startedShooting = true;
         }
 
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        if(touchDetected && mousePos.y <= 1.5f )
+        {
+
+            rb.MovePosition(new Vector2(mousePos.x, transform.position.y));
+        }
         
 
         if (isShooting)
@@ -171,7 +188,7 @@ public class FollowFingerScript : MonoBehaviour
 
             explosionPrefab.SetActive(true);
         }
-
+        /*
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);         
@@ -190,6 +207,7 @@ public class FollowFingerScript : MonoBehaviour
                     break;
             }
         }
+        */
     }
 
     public void endDash()
