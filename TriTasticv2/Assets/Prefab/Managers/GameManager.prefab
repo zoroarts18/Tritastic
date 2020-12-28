@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2064874541001196963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2064874541001196960}
+  - component: {fileID: 2064874541001196961}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2064874541001196960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064874541001196963}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2064874541001196961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064874541001196963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cecebcde43aa01542a87549442472ccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerProfile:
+    Tricoins: 0
+    HighScoreArcade: 0
+    HighScoreRings: 0
+    HighScoreShoot: 0
+    Quality: 0
+    GameMode: 0
+    BackGround: 
+    skins: 
+  score: 0
+  startSpeed: 5
+  speedStep: 1
+  scoreBetweenSteps: 8
+  lastStepScore: 0
+  savedSpeed: 0
+  timeBetweenSpawnList:
+  - 2.5
+  - 2
+  - 1.5
+  - 1
+  GameMode: 0
+  Player: {fileID: 0}
+  blockSpawner: {fileID: 0}
+  spawnPointLeft: {fileID: 0}
+  spawnPointMid: {fileID: 0}
+  spawnPointRight: {fileID: 0}
+  BG: {fileID: 0}
+  ui: {fileID: 0}
+  deadParticles: {fileID: 8954088554584236636, guid: ca1af37491ad4c84e8c44ced1fd8554f,
+    type: 3}
+  audio: {fileID: 0}
+  slowness: 10
+  GameIsOver: 0
+  GameIsPlayed: 0
+  retryButton: {fileID: 0}
+  pauseButton: {fileID: 0}
+  resumeButton: {fileID: 0}
+  backToHomeButton: {fileID: 0}
+  StartGameButton: {fileID: 0}
+  openShopButton: {fileID: 0}
+  closeShopButton: {fileID: 0}
+  openSettingsButton: {fileID: 0}
+  closeSettingsButton: {fileID: 0}
+  QualityDropDown: {fileID: 0}
+  muteSoundButton: {fileID: 0}
+  switchGameModeToRight: {fileID: 0}
+  switchGameModeToLeft: {fileID: 0}
+  gameOverCanvas: {fileID: 0}
+  highscoreTextStartMenu: {fileID: 0}
+  scoreTextGameOver: {fileID: 0}
+  HighScoreTxtGameOver: {fileID: 0}
+  GameModeTxt: {fileID: 0}
+  ScoreTextIngame: {fileID: 0}
