@@ -24,6 +24,17 @@ public class PlayerProfile
     public int HighScoreRings;
     public int HighScoreShoot;
 
+    //------Arcade-------
+    public int PowerUpsCollected;
+    public int ArcadeMatchesPlayed;
+    public int ArcadeBlocksAvoided;
+    //------Rings---------
+    public int RingsMatchesPlayed;
+    public int RingsCatched;
+    //------Shoot---------
+    public int ShootMatchesPlayed;
+    public int ShootKills;
+
     public int Quality;
     public int GameMode;
     public Skin savedCurrentSkin;

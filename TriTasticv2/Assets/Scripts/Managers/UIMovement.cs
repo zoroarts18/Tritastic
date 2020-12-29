@@ -11,7 +11,9 @@ public class UIMovement : MonoBehaviour
     public GameObject SettingsPanel;
     public GameObject ProfilePanel;
     public GameObject MenuOptionsPanel;
-    
+    public GameObject BuyMoreTricoinsPanel;
+    public Animator BuyMoreTricoinsPanelAnim;
+
     void Start()
     {
         //Die Anzahl der Tween die Maximal zurselben Zeit laufen dürfen werden erhöht auf 1250/50
@@ -86,18 +88,33 @@ public class UIMovement : MonoBehaviour
         ShopMenu.DOAnchorPos(new Vector2(0, -2500), 1f);
     }
 
+    public void openMoreTricoinsPanel()
+    {
+        BuyMoreTricoinsPanel.SetActive(true);
+    }
 
+    public void closeMoreTricoinsPanel()
+    {
+        BuyMoreTricoinsPanelAnim.SetTrigger("close");
+        Invoke("deactivateMoreTricoinsPanel", 0.8f);
+    }
+
+    public void deactivateMoreTricoinsPanel()
+    {
+        BuyMoreTricoinsPanel.SetActive(false);
+    }
     #endregion
+
+
+
 
     #region ingameUI
 
-
     public void MoveInGameUIin()
     {
-        ingameUI.DOAnchorPos(new Vector2(0, 700), 1);
+        ingameUI.DOAnchorPos(new Vector2(0, -50), 1);
         StartUPMenu.gameObject.transform.parent.gameObject.SetActive(false);
     }
-
 
     //------------------------Pause Menu:----------------------------------------------------------------------------------------------------------
     public void movePauseMenuIn()
@@ -110,12 +127,6 @@ public class UIMovement : MonoBehaviour
     {
         pauseMenu.DOAnchorPos(new Vector2(-1000, 0), 0.1f);
     }
-
-
-
-    
-
-
     #endregion
 
 

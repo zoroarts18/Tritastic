@@ -57,6 +57,10 @@ public class GameManager : MonoBehaviour
     public Button openShopButton;
     public Button closeShopButton;
 
+    public Button openMoreTricoinsPanelBtn;
+    public Button closeMoreTricoinsPanelBtn;
+
+
     public Button openMenuButton;
     public Button closeMenuButton;
 
@@ -81,7 +85,23 @@ public class GameManager : MonoBehaviour
     public Text highscoreTextStartMenu;
     public Text scoreTextGameOver;
     public Text TricoinsTextGameOver;
+
+    //Profile UI:
+    public Text ProfileArcadeHighScoreTxt;
+    public Text ProfileRingsHighScoreTxt;
+    public Text ProfileShootHighScoreTxt;
     
+    public Text ProfileArcadeMatchesTxt;
+    public Text ProfileArcadeAvoidsTxt;
+    public Text ProfileArcadeItemTxt;
+
+    public Text ProfileRingsMatchesTxt;
+    public Text ProfileRingsCatchedTxt;
+
+    public Text ProfileShootMatchesTxt;
+    public Text ProfileShootKillsTxt;
+
+    //UI
     public Text HighScoreTxtGameOver;
     public Text GameModeTxt;
 
@@ -117,6 +137,8 @@ public class GameManager : MonoBehaviour
         closeProfileButton.onClick.AddListener(closeProfile);
         switchGameModeToLeft.onClick.AddListener(delegate { switchGame(-1); });
         switchGameModeToRight.onClick.AddListener(delegate { switchGame(1); });
+        openMoreTricoinsPanelBtn.onClick.AddListener(openMoreTricoinsPanel);
+        closeMoreTricoinsPanelBtn.onClick.AddListener(closeMoreTricoinsPanel);
 
         blockSpawner.currentSpeed = startSpeed;
         playerProfile = SaveManager.Load();
@@ -257,12 +279,30 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         playerProfile = SaveManager.Load();
+        
+        if(GameMode == 0)
+        {
+            Debug.Log("GameMode 0");
+            playerProfile.ArcadeMatchesPlayed++;
+        }
+        else if(GameMode == 1)
+        {
+            Debug.Log("GameMode 1");
+            playerProfile.RingsMatchesPlayed++;
+        }
+        else if (GameMode == 2)
+        {
+            Debug.Log("GameMode 2");
+            playerProfile.ShootMatchesPlayed++;
+        }
         GameIsPlayed = true;
         selectSound();
         Player.GetComponent<FollowFingerScript>().ActivateTrails();
         ui.MoveStartMenuUIOut();
         blockSpawner.GetProfile();
     }
+
+    //--------------------------------------------------------Shop:---------------------------------------------------------------------
     public void openShop()
     {
         selectSound();
@@ -273,16 +313,42 @@ public class GameManager : MonoBehaviour
         selectSound();
         ui.moveShopOut();
     }
+
+    public void openMoreTricoinsPanel()
+    {
+        selectSound();
+        ui.openMoreTricoinsPanel();
+    }
+    public void closeMoreTricoinsPanel()
+    {
+        selectSound();
+        ui.closeMoreTricoinsPanel();
+    }
+
+    //---------------------------------------------------------Menu:-------------------------------------------------------------------------
     public void openMenu()
     {
         selectSound();
         ui.openMenu();
+
+        ProfileArcadeHighScoreTxt.text = playerProfile.HighScoreArcade.ToString();
+        ProfileRingsHighScoreTxt.text = playerProfile.HighScoreRings.ToString();
+        ProfileShootHighScoreTxt.text = playerProfile.HighScoreShoot.ToString();
+        ProfileArcadeMatchesTxt.text = playerProfile.ArcadeMatchesPlayed.ToString();
+        ProfileArcadeItemTxt.text = playerProfile.PowerUpsCollected.ToString();
+        ProfileArcadeAvoidsTxt.text = playerProfile.ArcadeBlocksAvoided.ToString();
+        ProfileRingsMatchesTxt.text = playerProfile.RingsMatchesPlayed.ToString();
+        ProfileRingsCatchedTxt.text = playerProfile.RingsCatched.ToString();
+        ProfileShootMatchesTxt.text = playerProfile.ShootMatchesPlayed.ToString();
+        ProfileShootKillsTxt.text = playerProfile.ShootKills.ToString();
     }
     public void closeMenu()
     {
         selectSound();
         ui.closeMenu();
     }
+
+    //---------------------------------------------------------Profile:-------------------------------------------------------------------------
     public void openProfile()
     {
         selectSound();
@@ -293,6 +359,8 @@ public class GameManager : MonoBehaviour
         selectSound();
         ui.closeProfile();
     }
+
+    //---------------------------------------------------------Settings:-------------------------------------------------------------------------
     public void openSettings()
     {
         selectSound();
@@ -305,9 +373,11 @@ public class GameManager : MonoBehaviour
         ui.closeSettings();
     }
 
+
     public void switchGame(int next)
     {
-        switch(next)
+        selectSound();
+        switch (next)
         {
             case -1:
                 {
@@ -394,7 +464,7 @@ public class GameManager : MonoBehaviour
     #region GameOver & Restart
     public void retryGame()
     {
-        selectSound();
+        //selectSound();
         GameObject.Find("Background Music").GetComponent<AudioSource>().enabled = true;
         gameOverCanvas.SetActive(false);
         SceneManager.LoadScene("FollowFinger");
@@ -465,11 +535,12 @@ public class GameManager : MonoBehaviour
     public void IncrementScore()
     {
         if (GameIsOver) return;
-
         score++;
-
         if(ScoreTextIngame != null) ScoreTextIngame.text = score.ToString();
 
+        if (GameMode == 0) playerProfile.ArcadeBlocksAvoided++;
+        else if (GameMode == 1) playerProfile.RingsCatched++;
+        else if (GameMode == 2) playerProfile.ShootKills++;
     }
     public int getDifficultyForScore(int score)
     {

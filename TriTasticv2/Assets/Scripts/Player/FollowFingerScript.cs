@@ -128,7 +128,7 @@ public class FollowFingerScript : MonoBehaviour
             //Hier wird die Bullet passende Bullet aus dem Array genommen (von dem Selected Skin abhängig)
             GameObject Bullet = Instantiate(playerBullet, new Vector2(transform.position.x, transform.position.y + 0.2f), Quaternion.identity);
             if (BG.muted == false) FindObjectOfType<AudioManager>().Play("Shoot SFX");
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
@@ -143,7 +143,7 @@ public class FollowFingerScript : MonoBehaviour
             {
                 FindObjectOfType<AudioManager>().Play("Shoot SFX");
             }
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
@@ -213,6 +213,9 @@ public class FollowFingerScript : MonoBehaviour
     {
         if (isDashing == false)
         {
+            pp.PowerUpsCollected++;
+            SaveManager.Save();
+
             isDashing = true;
             PowerUpBar.SetActive(true);
             Energy = maxEnergie;
@@ -236,6 +239,8 @@ public class FollowFingerScript : MonoBehaviour
 
     public void ActivateShoot()
     {
+        pp.PowerUpsCollected++;
+        SaveManager.Save();
         isShooting = true;
         PowerUpBar.SetActive(true);
         Energy = maxEnergie;
@@ -272,7 +277,7 @@ public class FollowFingerScript : MonoBehaviour
                 if(BG.muted== false) audio.Play("Block Explosion");
                 Instantiate(plus1,new Vector3 (c11.gameObject.transform.position.x, c11.gameObject.transform.position.y +1, -1 ), Quaternion.identity);
                 GameObject BlockDeadParticles = Instantiate(ObstacleDestroyedWithDashParticles[(int)pp.currentBg], new Vector2(c11.transform.position.x, c11.transform.position.y), Quaternion.identity);
-                Debug.LogError("Dash HG" + (int)pp.currentBg);
+                
                 Destroy(c11.gameObject);
             }
             else Death();
