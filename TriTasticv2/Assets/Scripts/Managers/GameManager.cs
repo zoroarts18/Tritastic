@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Rendering.PostProcessing;
+
 
 public class GameManager : MonoBehaviour
 {
     public PlayerProfile playerProfile;
-
+    //------------------------------------------------------------------------------------------------------
+    [Header("Values for the growing difficulty")]
     public int score;
     public float startSpeed = 5;
     public float speedStep = 1;
     public float scoreBetweenSteps = 8;
     public float lastStepScore = 0;
     public float savedSpeed = 0;
-
-    //Alle floats für die Zeiten zwischen den Spawns, je kleiner die Zahl desto schwerer, weil weniger Zeit zwischen Spawn
     public float[] timeBetweenSpawnList =
     {
         2.5f,
@@ -24,18 +23,14 @@ public class GameManager : MonoBehaviour
         1.5f,
         1f,
     };
-
     public int GameMode;
-
-
+    //------------------------------------------------------------------------------------------------------
     [Header("Components & Scripts to assign")]
     public GameObject Player;
     public BlockSpawner blockSpawner;
     public GameObject spawnPointLeft, spawnPointMid, spawnPointRight;
-
     public BackGroundMusicManagement BG;
     public UIMovement ui;
-    public GameObject deadParticles;
     public AudioManager audio;
 
     //------------------------------------------------------------------------------------------------------
@@ -46,76 +41,75 @@ public class GameManager : MonoBehaviour
     public bool GameIsPlayed;
 
     //------------------------------------------------------------------------------------------------------
-    [Header("UI")]
-    //UI Buttons:
-    public Button retryButton;
+    [Header("Ingame UI")]
     public Button pauseButton;
+    public Text ScoreTextIngame;
+
+    //------------------------------------------------------------------------------------------------------
+    [Header("Pause Menu UI")]
     public Button resumeButton;
     public Button backToHomeButton;
+    public Button muteSoundButtonPause;
 
-    public Button StartGameButton;
-    public Button openShopButton;
-    public Button closeShopButton;
-
-    public Button openMoreTricoinsPanelBtn;
-    public Button closeMoreTricoinsPanelBtn;
-
-
-    public Button openMenuButton;
-    public Button closeMenuButton;
-
-    public Button openProfileButton;
-    public Button closeProfileButton;
-
-    public Button openSettingsButton;
-    public Button closeSettingsButton;
-
-    //Settings UI
-    public Dropdown QualityDropDown;
-    public Button muteSoundButton;
-
-    public Button switchGameModeToRight;
-    public Button switchGameModeToLeft;
-
-    //UI Panels:
-    
-    public GameObject gameOverCanvas;
-
-    //UI Texts:
-    public Text highscoreTextStartMenu;
+    //------------------------------------------------------------------------------------------------------
+    [Header("Game Over Menu")]
+    public Button retryButton;
+    public Button ReviveByWatchingAdButton;
     public Text scoreTextGameOver;
     public Text TricoinsTextGameOver;
+    public Text HighScoreTxtGameOver;
 
-    //Profile UI:
+    //------------------------------------------------------------------------------------------------------
+    [Header("Start Menu UI Buttons")]
+    public Button StartGameButton;
+    public Button switchGameModeToRight;
+    public Button switchGameModeToLeft;
+    public Button openShopButton;
+    public Button closeShopButton;
+    public Button openMoreTricoinsPanelBtn;
+    public Button closeMoreTricoinsPanelBtn;
+    public Button openMenuButton;
+    public Button closeMenuButton;
+    public Button openProfileButton;
+    public Button closeProfileButton;
+    public Button openSettingsButton;
+    public Button closeSettingsButton;
+    public Button UpgradeBoostAbilityButton;
+    public Button UpgradeShootAbilityButton;
+    public Button UpgradeEarningsButton;
+
+    //------------------------------------------------------------------------------------------------------
+    [Header("Start Menu UI Texts")]
+    public Text highscoreTextStartMenu;
+    public Text GameModeTxt;
     public Text ProfileArcadeHighScoreTxt;
     public Text ProfileRingsHighScoreTxt;
     public Text ProfileShootHighScoreTxt;
-    
     public Text ProfileArcadeMatchesTxt;
     public Text ProfileArcadeAvoidsTxt;
     public Text ProfileArcadeItemTxt;
-
     public Text ProfileRingsMatchesTxt;
     public Text ProfileRingsCatchedTxt;
-
     public Text ProfileShootMatchesTxt;
     public Text ProfileShootKillsTxt;
 
-    //UI
-    public Text HighScoreTxtGameOver;
-    public Text GameModeTxt;
+    //------------------------------------------------------------------------------------------------------
+    [Header("Profile Ints")]
+    public int RingscatchedThisRound;
+    public int BlocksAvoidedThisRound;
+    public int ShootKillsThisRound;
 
-    public Text ScoreTextIngame;
-
+    //------------------------------------------------------------------------------------------------------
+    [Header("Important for Changing Colors")]
     public SpriteRenderer BackGroundImg;
     //Die Sprites müssen in der Reihenfolge sein wie die Werte im Enum Background 
     public Sprite[] backGroundSprites;
     public Sprite[] backGroundSpritesUI;
     public Image[] backGroundsToChange;
-
     public Button[] ButtonsToChangeDesign;
     public Color[] colors;
 
+    //------------------------------------------------------------------------------------------------------
     void Start()
     {
         Time.timeScale = 1;
@@ -139,37 +133,70 @@ public class GameManager : MonoBehaviour
         switchGameModeToRight.onClick.AddListener(delegate { switchGame(1); });
         openMoreTricoinsPanelBtn.onClick.AddListener(openMoreTricoinsPanel);
         closeMoreTricoinsPanelBtn.onClick.AddListener(closeMoreTricoinsPanel);
+        UpgradeBoostAbilityButton.onClick.AddListener(UpgradeBoostAbility);
+        UpgradeShootAbilityButton.onClick.AddListener(UpgradeShootAbility);
+        UpgradeEarningsButton.onClick.AddListener(UpgradeEarnings);
 
         blockSpawner.currentSpeed = startSpeed;
         playerProfile = SaveManager.Load();
 
-        GetQualityFromSaveFile();
         GetGameModeFromSaveFile();
         GetBackGroundFromSaveFile();
 
         GameIsPlayed = false;
+
+        RingscatchedThisRound = 0;
+        BlocksAvoidedThisRound= 0;
+        ShootKillsThisRound = 0;
+
+        UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
+        UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
+        UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
     }
+    //SFX:
 
-    public void GetQualityFromSaveFile()
+    public void UpgradeShootAbility()
     {
-        switch (playerProfile.Quality)
+        if(playerProfile.ShootUpgradeCount <10)
         {
-            case 0:
-                {
-                    Camera.main.GetComponent<PostProcessVolume>().enabled = true;
-                    QualityDropDown.value = 0;
-                    return;
-                }
-
-            case 1:
-                {
-                    Camera.main.GetComponent<PostProcessVolume>().enabled = false;
-                    QualityDropDown.value = 1;
-                    return;
-                }
+            Debug.LogError("Shoot Upgrade");
+            playerProfile.ShootUpgrade += 0.5f;
+            playerProfile.ShootUpgradeCount++;
+            UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
+            SaveManager.Save();
+        }
+        
+    }
+    public void UpgradeBoostAbility()
+    {
+        if(playerProfile.BoostUpgradeCount <10)
+        {
+            Debug.LogError("Boost Upgrade");
+            playerProfile.BoostUpgrade += 0.5f;
+            playerProfile.BoostUpgradeCount++;
+            UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
+            SaveManager.Save();
         }
     }
 
+    public void UpgradeEarnings()
+    {
+        if(playerProfile.TricoinsUpgradeCount < 10)
+        {
+            Debug.LogError("Coins Upgrade");
+            playerProfile.TricoinsUpgrade += 1;
+            playerProfile.TricoinsUpgradeCount++;
+            UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
+            SaveManager.Save();
+        }
+    }
+    public void selectSound()
+    {
+        if (BG.muted == false)
+            audio.Play("Select Sound");
+    }
+
+    #region GetInfosFromSaveFile
     public void GetBackGroundFromSaveFile()
     {
         BackGroundImg.sprite = backGroundSprites[(int)playerProfile.currentBg];
@@ -232,17 +259,13 @@ public class GameManager : MonoBehaviour
                 }
         }
     }
-    //SFX:
-    public void selectSound()
-    {
-        if (BG.muted == false)
-            audio.Play("Select Sound");
-    }
+
+    #endregion
 
     #region pause & unpause
     public void pauseGame()
     {
-        if(!gameOverCanvas.activeSelf)
+        if(!ui.GameOverPanel.activeSelf)
         {
             selectSound();
             pauseButton.gameObject.SetActive(false);
@@ -278,28 +301,13 @@ public class GameManager : MonoBehaviour
     
     public void StartGame()
     {
-        playerProfile = SaveManager.Load();
-        
-        if(GameMode == 0)
-        {
-            Debug.Log("GameMode 0");
-            playerProfile.ArcadeMatchesPlayed++;
-        }
-        else if(GameMode == 1)
-        {
-            Debug.Log("GameMode 1");
-            playerProfile.RingsMatchesPlayed++;
-        }
-        else if (GameMode == 2)
-        {
-            Debug.Log("GameMode 2");
-            playerProfile.ShootMatchesPlayed++;
-        }
         GameIsPlayed = true;
         selectSound();
         Player.GetComponent<FollowFingerScript>().ActivateTrails();
         ui.MoveStartMenuUIOut();
         blockSpawner.GetProfile();
+
+        SaveManager.Save();
     }
 
     //--------------------------------------------------------Shop:---------------------------------------------------------------------
@@ -399,6 +407,18 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(playerProfile.ShootUpgradeCount == 10)
+        {
+            UpgradeShootAbilityButton.interactable = false;
+        }
+        if(playerProfile.BoostUpgradeCount == 10)
+        {
+            UpgradeBoostAbilityButton.interactable = false;
+        }
+        if(playerProfile.TricoinsUpgradeCount == 10)
+        {
+            UpgradeEarningsButton.interactable = false;
+        }
 
         scoreTextGameOver.text = score.ToString();
         int difficulty = getDifficultyForScore(score);
@@ -464,24 +484,36 @@ public class GameManager : MonoBehaviour
     #region GameOver & Restart
     public void retryGame()
     {
-        //selectSound();
-        GameObject.Find("Background Music").GetComponent<AudioSource>().enabled = true;
-        gameOverCanvas.SetActive(false);
-        SceneManager.LoadScene("FollowFinger");
         Time.timeScale = 1;
+        SceneManager.LoadScene("FollowFinger");
     }
     public void EndGame()
     {
-        playerProfile = SaveManager.Load();
+        //playerProfile = SaveManager.Load();
+
+        playerProfile.ArcadeBlocksAvoided += BlocksAvoidedThisRound;
+        playerProfile.RingsCatched += RingscatchedThisRound;
+        playerProfile.ShootKills += ShootKillsThisRound;
 
         GameIsOver = true;
         
         if (GameMode == 0)
         {
-            int TricoinsFromCurrentRound = score * 50;
-            TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
-            playerProfile.Tricoins += TricoinsFromCurrentRound;
+            playerProfile.ArcadeMatchesPlayed++;
+            if(playerProfile.TricoinsUpgrade == 0)
+            {
+                int TricoinsFromCurrentRound = score / 10;
+                TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
+                playerProfile.Tricoins += TricoinsFromCurrentRound;
+            }
 
+            else
+            {
+                int TricoinsFromCurrentRound = score / (11 - playerProfile.TricoinsUpgrade);
+                TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
+                playerProfile.Tricoins += TricoinsFromCurrentRound;
+            }
+            
             if (score > playerProfile.HighScoreArcade)
             {
                 playerProfile.HighScoreArcade = score;
@@ -495,26 +527,32 @@ public class GameManager : MonoBehaviour
         }
         if (GameMode == 1)
         {
+            playerProfile.RingsMatchesPlayed++;
+
             if (score > playerProfile.HighScoreRings)
             {
                 playerProfile.HighScoreRings = score;
-                SaveManager.Save();
+                
                 HighScoreTxtGameOver.text = score.ToString();
             }
 
             else HighScoreTxtGameOver.text = playerProfile.HighScoreRings.ToString();
+
+            SaveManager.Save();
         }
         if (GameMode == 2)
         {
+            playerProfile.ShootMatchesPlayed++;
+
             if (score > playerProfile.HighScoreShoot)
             {
                 playerProfile.HighScoreShoot = score;
-                SaveManager.Save();
                 HighScoreTxtGameOver.text = score.ToString();
             }
-
             else HighScoreTxtGameOver.text = playerProfile.HighScoreShoot.ToString();
+            SaveManager.Save();
         }
+
         scoreTextGameOver.text = score.ToString();
         StartCoroutine(RestartLevel());
     }
@@ -526,7 +564,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f / slowness);
         Time.timeScale = 1f;
         Time.fixedDeltaTime = Time.fixedDeltaTime / slowness;
-        gameOverCanvas.SetActive(true);
+        ui.openGameOverMenu();
     }
     #endregion
 
@@ -537,10 +575,13 @@ public class GameManager : MonoBehaviour
         if (GameIsOver) return;
         score++;
         if(ScoreTextIngame != null) ScoreTextIngame.text = score.ToString();
+        Debug.LogError("Score ++");
+        if (GameMode == 0) BlocksAvoidedThisRound ++;
+        else if (GameMode == 1) RingscatchedThisRound++;
+        else if (GameMode == 2) ShootKillsThisRound++;
 
-        if (GameMode == 0) playerProfile.ArcadeBlocksAvoided++;
-        else if (GameMode == 1) playerProfile.RingsCatched++;
-        else if (GameMode == 2) playerProfile.ShootKills++;
+
+        //SaveManager.Save();
     }
     public int getDifficultyForScore(int score)
     {

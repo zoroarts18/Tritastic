@@ -11,6 +11,7 @@ public class UIMovement : MonoBehaviour
     public GameObject SettingsPanel;
     public GameObject ProfilePanel;
     public GameObject MenuOptionsPanel;
+    public GameObject GameOverPanel;
     public GameObject BuyMoreTricoinsPanel;
     public Animator BuyMoreTricoinsPanelAnim;
 
@@ -105,9 +106,6 @@ public class UIMovement : MonoBehaviour
     }
     #endregion
 
-
-
-
     #region ingameUI
 
     public void MoveInGameUIin()
@@ -122,10 +120,15 @@ public class UIMovement : MonoBehaviour
         pauseMenu.DOAnchorPos(Vector2.zero, 0.2f);
     }
 
-
     public void movePauseMenuOut()
     {
         pauseMenu.DOAnchorPos(new Vector2(-1000, 0), 0.1f);
+    }
+
+    public void openGameOverMenu()
+    {
+        ingameUI.gameObject.SetActive(false);
+        GameOverPanel.SetActive(true);
     }
     #endregion
 

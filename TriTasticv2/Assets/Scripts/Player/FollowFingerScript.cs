@@ -35,9 +35,10 @@ public class FollowFingerScript : MonoBehaviour
     
 
     [Header("Stats & Abilities")]
-    public float DashTime = 7f;
-    private float Energy;
-    private float maxEnergie = 8;
+    public float DashTime;
+    public float ShootTime;
+    public float maxDashTIme;
+    public float maxShootTime;
 
     public Image BoostIndicator;
     public Image ShootIndicator;
@@ -85,7 +86,6 @@ public class FollowFingerScript : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         audio = GameObject.FindWithTag("Audio").GetComponent<AudioManager>();
         touchDetected = false;
-
         PowerUpBar.SetActive(false);
 
         isShooting = false;
@@ -110,6 +110,19 @@ public class FollowFingerScript : MonoBehaviour
         playerDeathVFX = DeathParticles[(int)currentSkin];
 
         playerTrail.SetActive(true);
+
+        if(pp.BoostUpgrade == 0)
+        {
+            maxShootTime = 4;
+            maxDashTIme = 4;
+        }
+        else
+        {
+            maxShootTime = 4 + pp.ShootUpgrade;
+            maxDashTIme = 4 + pp.BoostUpgrade;
+        }
+        DashTime = maxDashTIme;
+        ShootTime = maxShootTime;
     }
 
     public void changeSkin(Skin selectedSkin)
@@ -165,18 +178,22 @@ public class FollowFingerScript : MonoBehaviour
         {
             ShootIndicator.enabled = true;
             BoostIndicator.enabled = false;
-            Energy -= Time.deltaTime;
-            PowerUpSlider.value = Energy;
+            ShootTime -= Time.deltaTime;
+            PowerUpSlider.value = ShootTime;
         }
 
-        if(!isShooting) ShootIndicator.enabled = false;
+        if (!isShooting)
+        {
+            ShootTime = maxShootTime;
+            ShootIndicator.enabled = false;
+        }
 
         if (isDashing)
         {
-            Energy -= Time.deltaTime;
             ShootIndicator.enabled = false;
             BoostIndicator.enabled = true;
-            PowerUpSlider.value = Energy;
+            DashTime -= Time.deltaTime;
+            PowerUpSlider.value = DashTime;
         }
 
         if(!isDashing ) BoostIndicator.enabled = false;
@@ -195,8 +212,9 @@ public class FollowFingerScript : MonoBehaviour
         WindParticles.SetActive(false);
         gameManager.resetDashSpeed();
 
-        Invoke("PlayerNotInvincible", 2f);
-        Invoke("DeactivatePowerBar",1);
+        PlayerNotInvincible();
+        DeactivatePowerBar();
+        DashTime = maxDashTIme;
     }
 
     void DeactivatePowerBar()
@@ -215,14 +233,13 @@ public class FollowFingerScript : MonoBehaviour
         {
             pp.PowerUpsCollected++;
             SaveManager.Save();
-
-            isDashing = true;
+            PowerUpSlider.value = DashTime;
+            PowerUpSlider.maxValue = DashTime;
             PowerUpBar.SetActive(true);
-            Energy = maxEnergie;
-            PowerUpSlider.value = Energy;
             gameManager.setDashSpeed();
             WindParticles.SetActive(true);
-            Invoke("endDash", DashTime);                            
+            Invoke("endDash", DashTime);
+            isDashing = true;
         }
     }
 
@@ -241,12 +258,12 @@ public class FollowFingerScript : MonoBehaviour
     {
         pp.PowerUpsCollected++;
         SaveManager.Save();
-        isShooting = true;
         PowerUpBar.SetActive(true);
-        Energy = maxEnergie;
-        PowerUpSlider.value = Energy;
+        PowerUpSlider.value = ShootTime;
+        PowerUpSlider.maxValue = ShootTime;
+        Invoke("stopShooting", ShootTime);
+        isShooting = true;
         StartCoroutine(shoot());
-        Invoke("stopShooting", 8f);
     }
 
     public void Death()
@@ -262,9 +279,13 @@ public class FollowFingerScript : MonoBehaviour
         if (BG.muted == false)
         {
             audio.Play("Explosion Sound");
+        }
+        if(!BG.vibrationMuted)
+        {
             Handheld.Vibrate();
         }
         gameManager.EndGame();
+
     }
 
     void OnCollisionEnter2D(Collision2D c11)

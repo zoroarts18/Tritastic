@@ -35,6 +35,14 @@ public class PlayerProfile
     public int ShootMatchesPlayed;
     public int ShootKills;
 
+    //------Upgrades-------
+    public float ShootUpgrade;
+    public float BoostUpgrade;
+    public int TricoinsUpgrade;
+    public int ShootUpgradeCount;
+    public int BoostUpgradeCount;
+    public int TricoinsUpgradeCount;
+
     public int Quality;
     public int GameMode;
     public Skin savedCurrentSkin;
