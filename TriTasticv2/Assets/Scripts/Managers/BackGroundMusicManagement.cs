@@ -161,13 +161,13 @@ public class BackGroundMusicManagement : MonoBehaviour
             GetComponent<AudioSource>().volume = 0f;
 
             else
-                GetComponent<AudioSource>().volume = 0.5f;
+                GetComponent<AudioSource>().volume = 0.3f;
         }
 
         else
         {
             if(muted == false)
-            GetComponent<AudioSource>().volume = 0.05f;
+            GetComponent<AudioSource>().volume = 0.04f;
 
             else
                 GetComponent<AudioSource>().volume = 0f;

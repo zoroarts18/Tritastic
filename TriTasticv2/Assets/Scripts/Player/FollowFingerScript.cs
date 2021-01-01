@@ -52,7 +52,7 @@ public class FollowFingerScript : MonoBehaviour
 
 
     [Header("VFX")]
-    public GameObject BlockExplosion;
+    
     public GameObject WindParticles;
     public GameObject explosionPrefab;
 

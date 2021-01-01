@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7148189518955793891}
   - component: {fileID: 8618690068929628204}
   m_Layer: 0
-  m_Name: ShootPowerUp
+  m_Name: Shoot Item
   m_TagString: shootPowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   PowerUpVFX: {fileID: 3540409888419528115, guid: 30fa9b6e0aad41245a13296cb4214d7b,
     type: 3}
+  BG: {fileID: 0}
 --- !u!58 &8618690068929628204
 CircleCollider2D:
   m_ObjectHideFlags: 0

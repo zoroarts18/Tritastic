@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1251928058399756738}
   - component: {fileID: 7415882432405897670}
   m_Layer: 0
-  m_Name: VFX Ring
+  m_Name: Power Up VFX
   m_TagString: RingVFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

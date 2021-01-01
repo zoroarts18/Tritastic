@@ -191,3 +191,25 @@ MonoBehaviour:
   ringCatched: 0
   BG: {fileID: 0}
   Plus1: {fileID: 5114824165679310579, guid: 2562f1374dfcc594f98712ad1d5a8b28, type: 3}
+  pp:
+    Tricoins: 0
+    HighScoreArcade: 0
+    HighScoreRings: 0
+    HighScoreShoot: 0
+    PowerUpsCollected: 0
+    ArcadeMatchesPlayed: 0
+    ArcadeBlocksAvoided: 0
+    RingsMatchesPlayed: 0
+    RingsCatched: 0
+    ShootMatchesPlayed: 0
+    ShootKills: 0
+    ShootUpgrade: 0
+    BoostUpgrade: 0
+    TricoinsUpgrade: 0
+    ShootUpgradeCount: 0
+    BoostUpgradeCount: 0
+    TricoinsUpgradeCount: 0
+    Quality: 0
+    GameMode: 0
+    savedCurrentSkin: 0
+    currentBg: 0

@@ -123,8 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  CS: {fileID: 0}
-  uiManager: {fileID: 0}
+  gameManager: {fileID: 0}
   PlayerDeathVFX: {fileID: 5567262521234353074, guid: dfc42aa59215da643a9b7d3c25b45023,
     type: 3}
   plus1: {fileID: 5114824165679310579, guid: 2562f1374dfcc594f98712ad1d5a8b28, type: 3}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5794087007438153384}
   - component: {fileID: 2068613881}
   m_Layer: 0
-  m_Name: Kugel 1
+  m_Name: Boost Item
   m_TagString: Boost
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,3 +146,4 @@ MonoBehaviour:
   Player: {fileID: 0}
   PowerUpVFX: {fileID: 3540409888419528115, guid: 30fa9b6e0aad41245a13296cb4214d7b,
     type: 3}
+  BG: {fileID: 0}

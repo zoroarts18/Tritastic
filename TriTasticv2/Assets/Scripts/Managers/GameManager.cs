@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
 
 
 public class GameManager : MonoBehaviour
@@ -110,6 +113,14 @@ public class GameManager : MonoBehaviour
     public Color[] colors;
 
     //------------------------------------------------------------------------------------------------------
+
+    public Button ShowLeaderBoardBtn;
+    public bool isConnectedToGooglePlayServices;
+    private void Awake()
+    {
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.Activate();
+    }
     void Start()
     {
         Time.timeScale = 1;
@@ -136,7 +147,7 @@ public class GameManager : MonoBehaviour
         UpgradeBoostAbilityButton.onClick.AddListener(UpgradeBoostAbility);
         UpgradeShootAbilityButton.onClick.AddListener(UpgradeShootAbility);
         UpgradeEarningsButton.onClick.AddListener(UpgradeEarnings);
-
+        ShowLeaderBoardBtn.onClick.AddListener(openLeaderboard);
         blockSpawner.currentSpeed = startSpeed;
         playerProfile = SaveManager.Load();
 
@@ -152,6 +163,28 @@ public class GameManager : MonoBehaviour
         UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
         UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
         UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
+
+        SignInToGooglePlayServices();
+    }
+
+    public void SignInToGooglePlayServices()
+    {
+        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
+        {
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    {
+                        isConnectedToGooglePlayServices = true;
+                        break;
+                    }
+                default:
+                    {
+                        isConnectedToGooglePlayServices = false;
+                        break;
+                    }
+            }
+        });
     }
     //SFX:
 
@@ -487,6 +520,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("FollowFinger");
     }
+
+    public void openLeaderboard()
+    {
+        Social.ShowLeaderboardUI();
+    }
     public void EndGame()
     {
         //playerProfile = SaveManager.Load();
@@ -518,7 +556,16 @@ public class GameManager : MonoBehaviour
             {
                 playerProfile.HighScoreArcade = score;
                 HighScoreTxtGameOver.text = score.ToString();
+
+                if(isConnectedToGooglePlayServices == true)
+                {
+                    Social.ReportScore(score, GPGSIds.leaderboard_highscore, (success) =>
+                    {
+                        if (!success) Debug.LogError("HighScore could not be posted");
+                    });
+                }
             }
+
             else HighScoreTxtGameOver.text = playerProfile.HighScoreArcade.ToString();
 
 

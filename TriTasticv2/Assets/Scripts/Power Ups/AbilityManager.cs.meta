@@ -3,7 +3,11 @@ guid: ccc3b53af3028ec49b47e5d558cb601f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Player: {instanceID: 0}
+  - PowerUpVFX: {fileID: 3540409888419528115, guid: 30fa9b6e0aad41245a13296cb4214d7b,
+      type: 3}
+  - BG: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
