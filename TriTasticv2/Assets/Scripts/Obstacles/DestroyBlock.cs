@@ -59,7 +59,6 @@ public class DestroyBlock : MonoBehaviour
         //------------------------------------------Block Stirbt weil abgeschossen und 0 Leben---------------------------------------------------------------------
         if (life <= 0)
         {
-            Debug.LogError("Tod Block");
             if(BG.muted == false) FindObjectOfType<AudioManager>().Play("Block Explosion");
 
             if(playersSkin <= 3) Instantiate(ownDeathPart[playerBG], transform.position, Quaternion.identity);
@@ -100,7 +99,6 @@ public class DestroyBlock : MonoBehaviour
                 if (Player.GetComponent<FollowFingerScript>().isDead == false)
                 {
                     Player.GetComponent<FollowFingerScript>().isDead = true;
-                    Debug.LogError("Skin:" + playersSkin);
                     Instantiate(playerDeathPart[playersSkin], Player.transform.position, Quaternion.identity);
                     Player.SetActive(false);
                     FindObjectOfType<GameManager>().EndGame();

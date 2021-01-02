@@ -28,7 +28,6 @@ public class SaveManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            //Debug.LogError("COuldnt access save");
             Debug.LogError(e);
         }
     }

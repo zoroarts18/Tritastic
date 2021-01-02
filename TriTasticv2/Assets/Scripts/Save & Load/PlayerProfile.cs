@@ -56,7 +56,7 @@ public enum Skin : int
 {
     Triangle = 0,
     Jet = 1,
-    Batman = 2,
+    Helicopter = 2,
     Shuriken = 3,
     Easter = 4,
     Halloween = 5,

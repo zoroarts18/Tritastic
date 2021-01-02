@@ -169,8 +169,9 @@ public class GameManager : MonoBehaviour
 
     public void SignInToGooglePlayServices()
     {
-        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
+        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptAlways, (result) =>
         {
+            Debug.Log("PlayGamesPlatform Authenticate returned status code " + (int)result + ": " + result.ToString());
             switch (result)
             {
                 case SignInStatus.Success:
@@ -192,7 +193,6 @@ public class GameManager : MonoBehaviour
     {
         if(playerProfile.ShootUpgradeCount <10)
         {
-            Debug.LogError("Shoot Upgrade");
             playerProfile.ShootUpgrade += 0.5f;
             playerProfile.ShootUpgradeCount++;
             UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
@@ -204,7 +204,6 @@ public class GameManager : MonoBehaviour
     {
         if(playerProfile.BoostUpgradeCount <10)
         {
-            Debug.LogError("Boost Upgrade");
             playerProfile.BoostUpgrade += 0.5f;
             playerProfile.BoostUpgradeCount++;
             UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
@@ -216,7 +215,6 @@ public class GameManager : MonoBehaviour
     {
         if(playerProfile.TricoinsUpgradeCount < 10)
         {
-            Debug.LogError("Coins Upgrade");
             playerProfile.TricoinsUpgrade += 1;
             playerProfile.TricoinsUpgradeCount++;
             UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
@@ -622,7 +620,6 @@ public class GameManager : MonoBehaviour
         if (GameIsOver) return;
         score++;
         if(ScoreTextIngame != null) ScoreTextIngame.text = score.ToString();
-        Debug.LogError("Score ++");
         if (GameMode == 0) BlocksAvoidedThisRound ++;
         else if (GameMode == 1) RingscatchedThisRound++;
         else if (GameMode == 2) ShootKillsThisRound++;

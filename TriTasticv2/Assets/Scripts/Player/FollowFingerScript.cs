@@ -19,6 +19,7 @@ public class FollowFingerScript : MonoBehaviour
     public GameObject[] ObstacleDestroyedWithBulletParticles;
     public GameObject[] ObstacleDestroyedWithDashParticles;
     public GameObject[] trails;
+    public GameObject HeliFlügel;
 
     public GameObject playerBullet;
     public GameObject playerDeathVFX;
@@ -130,6 +131,11 @@ public class FollowFingerScript : MonoBehaviour
         // Hier wird der Skin vom Shop Manager übergeben und dann vom Player genutzt um das richtige Image zum Skin zu holen (skins[0]= Triangle, skins[1]= Jet ,skins[2]= Batman, skins[3]= Ninja
         //skins[4]= Easter, skins[5]= Halloween, skins[6]= Christmas, skins[7]= Silvester
         sr.sprite = skins[(int)selectedSkin];
+        if (selectedSkin == Skin.Helicopter)
+            HeliFlügel.SetActive(true);
+        else
+            HeliFlügel.SetActive(false);
+
         currentSkin = selectedSkin;
     }
 

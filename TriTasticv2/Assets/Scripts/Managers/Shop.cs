@@ -14,7 +14,7 @@ public class Shop : MonoBehaviour
 
     [Header("Buy Buttons Skins")]
     public Button BuyJetButton;
-    public Button BuyBatmanButton;
+    public Button BuyHeliButton;
     public Button BuyNinjaSternButton;
     public Button BuyEasterButton;
     public Button BuyHalloweenButton;
@@ -23,7 +23,7 @@ public class Shop : MonoBehaviour
 
     [Header("Sell Buttons Skins")]
     public Button SellJetButton;
-    public Button SellBatmanButton;
+    public Button SellHeliButton;
     public Button SellNinjaSternButton;
     public Button SellEasterButton;
     public Button SellHalloweenButton;
@@ -33,7 +33,7 @@ public class Shop : MonoBehaviour
     [Header("Select Buttons Skins")]
     public Button SelectTriangleButton;
     public Button SelectJetButton;
-    public Button SelectBatmanButton;
+    public Button SelectHeliButton;
     public Button SelectNinjaSternButton;
     public Button SelectEasterButton;
     public Button SelectHalloweenButton;
@@ -79,7 +79,6 @@ public class Shop : MonoBehaviour
         {
             if (playerProfile.skinPurchased[s])
             {
-                Debug.Log(s.ToString() + " gekauft");
                 skinBuyButtons[s].gameObject.SetActive(false);
                 skinSelectButtons[s].gameObject.SetActive(true);
             }
@@ -90,16 +89,14 @@ public class Shop : MonoBehaviour
             }
         }
 
-
         //Preise für die Skins
         skinPrices[Skin.Jet] = 100;
-        skinPrices[Skin.Batman] = 150;
+        skinPrices[Skin.Helicopter] = 150;
         skinPrices[Skin.Shuriken] = 200;
         skinPrices[Skin.Easter] = 300;
         skinPrices[Skin.Halloween] = 300;
         skinPrices[Skin.Christmas] = 300;
         skinPrices[Skin.NewYear] = 300;
-
 
         backGroundSelectButtons[Background.SolidRed] = SelectSolidRedButton;
         backGroundSelectButtons[Background.SolidGreen] = SelectSolidGreenButton;
@@ -109,7 +106,7 @@ public class Shop : MonoBehaviour
         //Dem Button-Skin Dictionary werden die Skins zugefügt
         #region Skin Buttons
         skinBuyButtons[Skin.Jet] = BuyJetButton;
-        skinBuyButtons[Skin.Batman] = BuyBatmanButton;
+        skinBuyButtons[Skin.Helicopter] = BuyHeliButton;
         skinBuyButtons[Skin.Shuriken] = BuyNinjaSternButton;
         skinBuyButtons[Skin.Easter] = BuyEasterButton;
         skinBuyButtons[Skin.Halloween] = BuyHalloweenButton;
@@ -118,7 +115,7 @@ public class Shop : MonoBehaviour
 
         skinSelectButtons[Skin.Triangle] = SelectTriangleButton;
         skinSelectButtons[Skin.Jet] = SelectJetButton;
-        skinSelectButtons[Skin.Batman] = SelectBatmanButton;
+        skinSelectButtons[Skin.Helicopter] = SelectHeliButton;
         skinSelectButtons[Skin.Shuriken] = SelectNinjaSternButton;
         skinSelectButtons[Skin.Easter] = SelectEasterButton;
         skinSelectButtons[Skin.Halloween] = SelectHalloweenButton;
@@ -126,13 +123,12 @@ public class Shop : MonoBehaviour
         skinSelectButtons[Skin.NewYear] = SelectNewYearButton;
 
         skinSellButtons[Skin.Jet] = SellJetButton;
-        skinSellButtons[Skin.Batman] = SellBatmanButton;
+        skinSellButtons[Skin.Helicopter] = SellHeliButton;
         skinSellButtons[Skin.Shuriken] = SellNinjaSternButton;
         skinSellButtons[Skin.Easter] = SellEasterButton;
         skinSellButtons[Skin.Halloween] = SellHalloweenButton;
         skinSellButtons[Skin.Christmas] = SellChristmasButton;
         skinSellButtons[Skin.NewYear] = SellNewYearButton;
-
 
         //Mit dieser Foreach Loop bekommt jeder Background Button seine Function
         foreach (KeyValuePair<Background, Button> bgButtons in backGroundSelectButtons)

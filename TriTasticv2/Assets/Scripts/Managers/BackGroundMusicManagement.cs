@@ -132,7 +132,6 @@ public class BackGroundMusicManagement : MonoBehaviour
         if(muted)
         {
             muteButton.GetComponent<Image>().sprite = MusicMuted;
-            //muteButtonHomeMenu.GetComponent<Image>().sprite = MusicMuted;
             muteButtonHomeMenu.transform.GetChild(0).gameObject.GetComponent<Text>().text = "";
             GetComponent<AudioSource>().volume = 0;
         }
@@ -140,7 +139,6 @@ public class BackGroundMusicManagement : MonoBehaviour
         else
         {
             muteButton.GetComponent<Image>().sprite = MusicLoud;
-            //muteButtonHomeMenu.GetComponent<Image>().sprite = MusicLoud;
             muteButtonHomeMenu.transform.GetChild(0).gameObject.GetComponent<Text>().text = "X";
         }
 
