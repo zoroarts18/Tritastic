@@ -33,7 +33,7 @@ public class FollowFingerScript : MonoBehaviour
     public GameObject PowerUpBar;
     public Slider PowerUpSlider;
     private AudioManager audio;
-    
+    public GameObject UIManager;
 
     [Header("Stats & Abilities")]
     public float DashTime;
@@ -79,8 +79,8 @@ public class FollowFingerScript : MonoBehaviour
     private Vector3 mousePos;
 
     public Skin currentSkin;
-    
 
+    public GameObject TodesBlock;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -274,10 +274,12 @@ public class FollowFingerScript : MonoBehaviour
 
     public void Death()
     {
+        playerTrail.SetActive(false);
         isDead = true;
         shake.camShake();
-        this.gameObject.SetActive(false);
-
+        //this.gameObject.SetActive(false);
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<PolygonCollider2D>().enabled = false;
         GameObject playerDeathParticles = Instantiate(DeathParticles[(int)currentSkin], new Vector2(transform.position.x, transform.position.y - 0.2f), Quaternion.identity);
         playerDeathParticles.tag = "Particles";
 
@@ -291,7 +293,83 @@ public class FollowFingerScript : MonoBehaviour
             Handheld.Vibrate();
         }
         gameManager.EndGame();
+    }
 
+    public void revive()
+    {
+        playerTrail.SetActive(true);
+        Destroy(TodesBlock);
+        UIManager.GetComponent<UIMovement>().ingameUI.gameObject.SetActive(true);
+        isDead = false;
+        gameManager.GameIsPlayed = true;
+        gameManager.GameIsOver = false;
+        this.gameObject.SetActive(true);
+        UIManager.GetComponent<UIMovement>().GameOverPanel.SetActive(false);
+        StartCoroutine(revivingEffect());
+    }
+
+    public IEnumerator revivingEffect()
+    {
+        GetComponent<PolygonCollider2D>().enabled = false;
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<PolygonCollider2D>().enabled = true;
     }
 
     void OnCollisionEnter2D(Collision2D c11)
@@ -299,15 +377,19 @@ public class FollowFingerScript : MonoBehaviour
         
         if (c11.gameObject.tag == "Blocks")
         {
-            if(isDashing)
+            if (isDashing)
             {
-                if(BG.muted== false) audio.Play("Block Explosion");
-                Instantiate(plus1,new Vector3 (c11.gameObject.transform.position.x, c11.gameObject.transform.position.y +1, -1 ), Quaternion.identity);
+                if (BG.muted == false) audio.Play("Block Explosion");
+                Instantiate(plus1, new Vector3(c11.gameObject.transform.position.x, c11.gameObject.transform.position.y + 1, -1), Quaternion.identity);
                 GameObject BlockDeadParticles = Instantiate(ObstacleDestroyedWithDashParticles[(int)pp.currentBg], new Vector2(c11.transform.position.x, c11.transform.position.y), Quaternion.identity);
-                
+
                 Destroy(c11.gameObject);
             }
-            else Death();
+            else
+            {
+                TodesBlock = c11.gameObject;
+                Death();
+            }
         }
     }
 }

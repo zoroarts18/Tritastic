@@ -58,10 +58,11 @@ public enum Skin : int
     Jet = 1,
     Helicopter = 2,
     Shuriken = 3,
-    Easter = 4,
-    Halloween = 5,
-    Christmas = 6,
-    NewYear = 7,
+    Motorrad = 4,
+    Easter = 5,
+    Halloween = 6,
+    Christmas = 7,
+    NewYear = 8,
 }
 
 public enum Background : int

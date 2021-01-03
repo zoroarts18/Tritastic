@@ -9,6 +9,7 @@ public class Shop : MonoBehaviour
     public PlayerProfile playerProfile;
     public GameObject Player;
     public GameObject gameManager;
+    public GameObject AdManager;
 
     public Text TricoinsInShop;
 
@@ -16,6 +17,7 @@ public class Shop : MonoBehaviour
     public Button BuyJetButton;
     public Button BuyHeliButton;
     public Button BuyNinjaSternButton;
+    public Button BuyMotorradButton;
     public Button BuyEasterButton;
     public Button BuyHalloweenButton;
     public Button BuyChristmasButton;
@@ -25,6 +27,7 @@ public class Shop : MonoBehaviour
     public Button SellJetButton;
     public Button SellHeliButton;
     public Button SellNinjaSternButton;
+    public Button SellMotorradButton;
     public Button SellEasterButton;
     public Button SellHalloweenButton;
     public Button SellChristmasButton;
@@ -35,6 +38,7 @@ public class Shop : MonoBehaviour
     public Button SelectJetButton;
     public Button SelectHeliButton;
     public Button SelectNinjaSternButton;
+    public Button SelectMotorradButton;
     public Button SelectEasterButton;
     public Button SelectHalloweenButton;
     public Button SelectChristmasButton;
@@ -51,24 +55,11 @@ public class Shop : MonoBehaviour
     private Dictionary<Skin, Button> skinSellButtons = new Dictionary<Skin, Button>();
     private Dictionary<Background, Button> backGroundSelectButtons = new Dictionary<Background, Button>();
     private Dictionary<Skin, int> skinPrices = new Dictionary<Skin, int>();
-
-
     void Start()
     {
         playerProfile = SaveManager.Load();
 
-        TricoinsInShop.text = playerProfile.Tricoins.ToString();
-        /*
-        //Checkt welcher Skin abgespeichert wurde und wechselt beim Player den Skin
-        if (playerProfile.savedCurrentSkin == Skin.Triangle) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Triangle);
-        if (playerProfile.savedCurrentSkin == Skin.Jet) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Jet);
-        if (playerProfile.savedCurrentSkin == Skin.Batman) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Batman);
-        if (playerProfile.savedCurrentSkin == Skin.Shuriken) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Shuriken);
-        if (playerProfile.savedCurrentSkin == Skin.Easter) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Easter);
-        if (playerProfile.savedCurrentSkin == Skin.Halloween) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Halloween);
-        if (playerProfile.savedCurrentSkin == Skin.Christmas) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.Christmas);
-        if (playerProfile.savedCurrentSkin == Skin.NewYear) Player.GetComponent<FollowFingerScript>().changeSkin(Skin.NewYear);
-        */
+        ShowTricoins();
         // stattdessen:
         Player.GetComponent<FollowFingerScript>().changeSkin(playerProfile.savedCurrentSkin);
 
@@ -92,7 +83,8 @@ public class Shop : MonoBehaviour
         //Preise für die Skins
         skinPrices[Skin.Jet] = 100;
         skinPrices[Skin.Helicopter] = 150;
-        skinPrices[Skin.Shuriken] = 200;
+        skinPrices[Skin.Shuriken] = 300;
+        skinPrices[Skin.Motorrad] = 300;
         skinPrices[Skin.Easter] = 300;
         skinPrices[Skin.Halloween] = 300;
         skinPrices[Skin.Christmas] = 300;
@@ -108,6 +100,7 @@ public class Shop : MonoBehaviour
         skinBuyButtons[Skin.Jet] = BuyJetButton;
         skinBuyButtons[Skin.Helicopter] = BuyHeliButton;
         skinBuyButtons[Skin.Shuriken] = BuyNinjaSternButton;
+        skinBuyButtons[Skin.Motorrad] = BuyMotorradButton;
         skinBuyButtons[Skin.Easter] = BuyEasterButton;
         skinBuyButtons[Skin.Halloween] = BuyHalloweenButton;
         skinBuyButtons[Skin.Christmas] = BuyChristmasButton;
@@ -117,6 +110,7 @@ public class Shop : MonoBehaviour
         skinSelectButtons[Skin.Jet] = SelectJetButton;
         skinSelectButtons[Skin.Helicopter] = SelectHeliButton;
         skinSelectButtons[Skin.Shuriken] = SelectNinjaSternButton;
+        skinSelectButtons[Skin.Motorrad] = SelectMotorradButton;
         skinSelectButtons[Skin.Easter] = SelectEasterButton;
         skinSelectButtons[Skin.Halloween] = SelectHalloweenButton;
         skinSelectButtons[Skin.Christmas] = SelectChristmasButton;
@@ -125,6 +119,7 @@ public class Shop : MonoBehaviour
         skinSellButtons[Skin.Jet] = SellJetButton;
         skinSellButtons[Skin.Helicopter] = SellHeliButton;
         skinSellButtons[Skin.Shuriken] = SellNinjaSternButton;
+        skinSellButtons[Skin.Motorrad] = SellMotorradButton;
         skinSellButtons[Skin.Easter] = SellEasterButton;
         skinSellButtons[Skin.Halloween] = SellHalloweenButton;
         skinSellButtons[Skin.Christmas] = SellChristmasButton;
@@ -155,22 +150,18 @@ public class Shop : MonoBehaviour
         {
             skinSellButtons[s].gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Sell " + skinPrices[s] / 2;
         }
-
-
         //Select Buttons bekommen die Select Function und als Paramter den passenden Skin
 
         foreach (KeyValuePair<Skin, Button> entry in skinSelectButtons)
         {
             Skin skin = entry.Key;
             entry.Value.onClick.AddListener(delegate { SelectSkin(skin); });
-
         }
 
         foreach (KeyValuePair<Skin, Button> entry in skinSellButtons)
         {
             Skin skin = entry.Key;
             entry.Value.onClick.AddListener(delegate { SellSkin(skin); });
-
         }
 
         UpdateSkinCollection();
@@ -182,17 +173,13 @@ public class Shop : MonoBehaviour
         foreach (Skin s in skinSelectButtons.Keys)
         {
             // Gehe durch alle Select Buttons durch und mache die interactable, wenn die nicht zu currentSkin gehören
-            if(s == currentSkin)
-            {
-                skinSelectButtons[s].interactable = false;
-            } else
-            {
-                skinSelectButtons[s].interactable = true;
-            }
-            Player.GetComponent<FollowFingerScript>().changeSkin(currentSkin);
+            if(s == currentSkin) skinSelectButtons[s].interactable = false;
 
+            else skinSelectButtons[s].interactable = true;
+
+            Player.GetComponent<FollowFingerScript>().changeSkin(currentSkin);
             playerProfile.savedCurrentSkin = currentSkin;
-            SaveManager.Save();
+            SaveProfile();
         }
         
     }
@@ -211,7 +198,16 @@ public class Shop : MonoBehaviour
                 skinSelectButtons[s].gameObject.SetActive(false);
             }
         }
+    }
 
+    public void SaveProfile()
+    {
+        SaveManager.Save();
+    }
+
+    public void ShowTricoins()
+    {
+        TricoinsInShop.text = playerProfile.Tricoins.ToString();
     }
 
     public void BuySkin(Skin skin)
@@ -224,38 +220,29 @@ public class Shop : MonoBehaviour
             //Der jeweilige KaufButton wird deaktiviert, weil man den Skin ja bereits besitzt
             skinBuyButtons[skin].gameObject.SetActive(false);
             //Es wird nochmal gespeichert
-
-            TricoinsInShop.text = playerProfile.Tricoins.ToString();
-            SaveManager.Save();
+            ShowTricoins();
+            SaveProfile();
             UpdateSkinCollection();
 
         }
-        
-        else
-        {
-        }
-        
     }
 
     public void SelectBG(Background bg)
     {
         playerProfile.currentBg = bg;
         gameManager.GetComponent<GameManager>().GetBackGroundFromSaveFile();
-
-        SaveManager.Save();
+        SaveProfile();
     }
 
     public void SellSkin(Skin skin)
     {
         playerProfile.Tricoins += skinPrices[skin] / 2;
-        
         //Der Bool wird auf false gesetzt, weil der SKin nun nicht mehr im Besitz ist und nicht mehr gespeichert werden soll
         playerProfile.skinPurchased[skin] = false;
         //Der Kauf Button wird wieder aktiv damit man ihn wieder kaufen kann
         skinBuyButtons[skin].gameObject.SetActive(true);
-        
-        TricoinsInShop.text = playerProfile.Tricoins.ToString();
-        SaveManager.Save();
+        ShowTricoins();
+        SaveProfile();
         UpdateSkinCollection();
     }
 }

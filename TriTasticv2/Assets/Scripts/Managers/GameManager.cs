@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
     //------------------------------------------------------------------------------------------------------
     [Header("Game Over Menu")]
     public Button retryButton;
-    public Button ReviveByWatchingAdButton;
     public Text scoreTextGameOver;
     public Text TricoinsTextGameOver;
     public Text HighScoreTxtGameOver;
@@ -114,8 +113,11 @@ public class GameManager : MonoBehaviour
 
     //------------------------------------------------------------------------------------------------------
 
+    public GameObject adManager;
+
     public Button ShowLeaderBoardBtn;
     public bool isConnectedToGooglePlayServices;
+    public Button ReviveByWatchingAdButton;
     private void Awake()
     {
         PlayGamesPlatform.DebugLogEnabled = true;
@@ -163,7 +165,6 @@ public class GameManager : MonoBehaviour
         UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
         UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
         UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
-
         SignInToGooglePlayServices();
     }
 
@@ -188,7 +189,6 @@ public class GameManager : MonoBehaviour
         });
     }
     //SFX:
-
     public void UpgradeShootAbility()
     {
         if(playerProfile.ShootUpgradeCount <10)
@@ -210,7 +210,6 @@ public class GameManager : MonoBehaviour
             SaveManager.Save();
         }
     }
-
     public void UpgradeEarnings()
     {
         if(playerProfile.TricoinsUpgradeCount < 10)
@@ -518,7 +517,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("FollowFinger");
     }
-
     public void openLeaderboard()
     {
         Social.ShowLeaderboardUI();
@@ -526,6 +524,17 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         //playerProfile = SaveManager.Load();
+
+        if(GameMode == 0)
+        {
+            ReviveByWatchingAdButton.gameObject.SetActive(true);
+        }
+
+        else
+        {
+            ReviveByWatchingAdButton.gameObject.SetActive(false);
+        }
+
 
         playerProfile.ArcadeBlocksAvoided += BlocksAvoidedThisRound;
         playerProfile.RingsCatched += RingscatchedThisRound;
@@ -617,7 +626,7 @@ public class GameManager : MonoBehaviour
 
     public void IncrementScore()
     {
-        if (GameIsOver) return;
+        if (Player.GetComponent<FollowFingerScript>().isDead) return;
         score++;
         if(ScoreTextIngame != null) ScoreTextIngame.text = score.ToString();
         if (GameMode == 0) BlocksAvoidedThisRound ++;

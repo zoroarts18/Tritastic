@@ -49,7 +49,7 @@ public class BackGroundMusicManagement : MonoBehaviour
             VibrationButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = "X";
         }
 
-        if(PlayerPrefs.GetInt("HighQuality") == 1)
+        if(PlayerPrefs.GetInt("HighQuality") == 0)
         {
             Camera.main.GetComponent<PostProcessVolume>().enabled = true;
             highQuality = true;
@@ -67,14 +67,14 @@ public class BackGroundMusicManagement : MonoBehaviour
         if(highQuality)
         {
             Camera.main.GetComponent<PostProcessVolume>().enabled = false;
-            PlayerPrefs.SetInt("HighQuality", 0);
+            PlayerPrefs.SetInt("HighQuality", 1);
             highQualityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = "";
             highQuality = false;
         }
         else
         {
             Camera.main.GetComponent<PostProcessVolume>().enabled = true;
-            PlayerPrefs.SetInt("HighQuality", 1);
+            PlayerPrefs.SetInt("HighQuality", 0);
             highQualityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = "X";
             highQuality = true;
         }

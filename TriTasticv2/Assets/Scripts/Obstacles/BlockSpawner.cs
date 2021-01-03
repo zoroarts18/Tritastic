@@ -32,7 +32,7 @@ public class BlockSpawner : MonoBehaviour
     {
         if (Time.time >= timeToSpawn)
         {
-            if (GameManager.GetComponent<GameManager>().GameIsPlayed == true)
+            if (Player.activeSelf && GameManager.GameIsPlayed)
             { 
                     SpawnBlocks();
                     timeToSpawn = Time.time + timeBetweenSpawn;
