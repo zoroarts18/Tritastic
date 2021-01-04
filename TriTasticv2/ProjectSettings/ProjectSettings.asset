@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 9
+  bundleVersion: 11
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -168,7 +168,7 @@ PlayerSettings:
     Android: com.ZoroDev.TriTastic
     Standalone: com.Company.ProductName
   buildNumber: {}
-  AndroidBundleVersionCode: 36
+  AndroidBundleVersionCode: 38
   AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 29
   AndroidPreferredInstallLocation: 1

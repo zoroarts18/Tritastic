@@ -237,6 +237,7 @@ public class Shop : MonoBehaviour
     public void SellSkin(Skin skin)
     {
         playerProfile.Tricoins += skinPrices[skin] / 2;
+        if (skin == playerProfile.savedCurrentSkin) SelectSkin(Skin.Triangle);
         //Der Bool wird auf false gesetzt, weil der SKin nun nicht mehr im Besitz ist und nicht mehr gespeichert werden soll
         playerProfile.skinPurchased[skin] = false;
         //Der Kauf Button wird wieder aktiv damit man ihn wieder kaufen kann

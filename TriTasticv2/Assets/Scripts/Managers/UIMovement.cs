@@ -14,6 +14,7 @@ public class UIMovement : MonoBehaviour
     public GameObject GameOverPanel;
     public GameObject BuyMoreTricoinsPanel;
     public Animator BuyMoreTricoinsPanelAnim;
+    public GameObject MoreTricoinsBGPanel;
 
     void Start()
     {
@@ -92,16 +93,19 @@ public class UIMovement : MonoBehaviour
     public void openMoreTricoinsPanel()
     {
         BuyMoreTricoinsPanel.SetActive(true);
+        MoreTricoinsBGPanel.SetActive(true);
     }
 
     public void closeMoreTricoinsPanel()
     {
+        
         BuyMoreTricoinsPanelAnim.SetTrigger("close");
-        Invoke("deactivateMoreTricoinsPanel", 0.8f);
+        Invoke("deactivateMoreTricoinsPanel", 0.5f);
     }
 
     public void deactivateMoreTricoinsPanel()
     {
+        MoreTricoinsBGPanel.SetActive(false);
         BuyMoreTricoinsPanel.SetActive(false);
     }
     #endregion

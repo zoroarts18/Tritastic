@@ -25,7 +25,11 @@ public class DailyReward : MonoBehaviour
         claimRewardBtn.onClick.AddListener(claimReward);
         lastRewardClaimed = ulong.Parse(PlayerPrefs.GetString("LastRewardClaimed"));
 
-        if (!isRewardReady()) claimRewardBtn.interactable = false;
+        if (!isRewardReady())
+        {
+            RewardPanel.SetActive(false);
+            claimRewardBtn.interactable = false;
+        }
     }
 
     private void Update()
