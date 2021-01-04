@@ -382,7 +382,6 @@ public class FollowFingerScript : MonoBehaviour
                 if (BG.muted == false) audio.Play("Block Explosion");
                 Instantiate(plus1, new Vector3(c11.gameObject.transform.position.x, c11.gameObject.transform.position.y + 1, -1), Quaternion.identity);
                 GameObject BlockDeadParticles = Instantiate(ObstacleDestroyedWithDashParticles[(int)pp.currentBg], new Vector2(c11.transform.position.x, c11.transform.position.y), Quaternion.identity);
-
                 Destroy(c11.gameObject);
             }
             else

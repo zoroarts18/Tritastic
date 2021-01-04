@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -118,6 +119,9 @@ public class GameManager : MonoBehaviour
     public Button ShowLeaderBoardBtn;
     public bool isConnectedToGooglePlayServices;
     public Button ReviveByWatchingAdButton;
+
+    private string ShareMessage;
+    public Button shareBtn;
     private void Awake()
     {
         PlayGamesPlatform.DebugLogEnabled = true;
@@ -150,6 +154,8 @@ public class GameManager : MonoBehaviour
         UpgradeShootAbilityButton.onClick.AddListener(UpgradeShootAbility);
         UpgradeEarningsButton.onClick.AddListener(UpgradeEarnings);
         ShowLeaderBoardBtn.onClick.AddListener(openLeaderboard);
+        shareBtn.onClick.AddListener(clickShareButton);
+
         blockSpawner.currentSpeed = startSpeed;
         playerProfile = SaveManager.Load();
 
@@ -521,6 +527,30 @@ public class GameManager : MonoBehaviour
     {
         Social.ShowLeaderboardUI();
     }
+
+    public void clickShareButton()
+    {
+        ShareMessage = "Holy Shit! I just scored " + score.ToString() + " points in my favourite mobile game: Tritastic! Can you beat me?";
+        StartCoroutine(TakeScreenshotAndShare());
+    }
+
+    private IEnumerator TakeScreenshotAndShare()
+    {
+        yield return new WaitForEndOfFrame();
+
+        Texture2D ss = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        ss.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        ss.Apply();
+
+        string filePath = Path.Combine(Application.temporaryCachePath, "shared img.png");
+        File.WriteAllBytes(filePath, ss.EncodeToPNG());
+
+        // To avoid memory leaks
+        Destroy(ss);
+
+        new NativeShare().AddFile(filePath).SetSubject("Tritastic").SetText (ShareMessage).Share();
+    }
+
     public void EndGame()
     {
         //playerProfile = SaveManager.Load();

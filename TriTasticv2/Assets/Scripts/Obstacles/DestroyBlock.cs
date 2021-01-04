@@ -61,7 +61,7 @@ public class DestroyBlock : MonoBehaviour
         {
             if(BG.muted == false) FindObjectOfType<AudioManager>().Play("Block Explosion");
 
-            if(playersSkin <= 3) Instantiate(ownDeathPart[playerBG], transform.position, Quaternion.identity);
+            if(playersSkin <= 4) Instantiate(ownDeathPart[playerBG], transform.position, Quaternion.identity);
 
             else Instantiate(ownDeathPartEventSkins[playersSkin], transform.position, Quaternion.identity);
             Instantiate(plus1, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);

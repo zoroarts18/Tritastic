@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 7
+  bundleVersion: 9
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -168,7 +168,7 @@ PlayerSettings:
     Android: com.ZoroDev.TriTastic
     Standalone: com.Company.ProductName
   buildNumber: {}
-  AndroidBundleVersionCode: 34
+  AndroidBundleVersionCode: 36
   AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 29
   AndroidPreferredInstallLocation: 1
@@ -262,8 +262,8 @@ PlayerSettings:
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: C:/Users/Mateo/Desktop/Stuff/Google Play Upload Keystore -
-    Wichtig/user.keystore
-  AndroidKeyaliasName: mateoskey
+    Wichtig/unitykeys.keystore
+  AndroidKeyaliasName: playstore_upload_key
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
