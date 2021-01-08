@@ -214,6 +214,7 @@ public class Shop : MonoBehaviour
     {
         if (playerProfile.Tricoins >= skinPrices[skin])
         {
+            SelectSkin(skin);
             playerProfile.Tricoins -= skinPrices[skin];
             //Der Bool wird auf true gesetzt, der Skin wird so in dem PlayerProfile gespeichert
             playerProfile.skinPurchased[skin] = true;

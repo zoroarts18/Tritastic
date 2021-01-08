@@ -9,9 +9,14 @@ public class DailyReward : MonoBehaviour
     public float msToWait = 5000;
     public Button claimRewardBtn;
     public Text RewardTimer;
+    public Text RewartTimerTextMenu;
     private ulong lastRewardClaimed;
 
     public GameObject RewardPanel;
+    public GameObject bgPanel;
+
+    public Button openPanelBtn;
+    public Button closePanelBtn;
 
     public static bool RewardPanelShown = false;
     public void Start()
@@ -19,7 +24,7 @@ public class DailyReward : MonoBehaviour
         if(!RewardPanelShown)
         {
             RewardPanelShown = true;
-            RewardPanel.SetActive(true);
+            openPanel();
         }
 
         claimRewardBtn.onClick.AddListener(claimReward);
@@ -27,9 +32,12 @@ public class DailyReward : MonoBehaviour
 
         if (!isRewardReady())
         {
-            RewardPanel.SetActive(false);
+            closePanel();
             claimRewardBtn.interactable = false;
         }
+
+        openPanelBtn.onClick.AddListener(openPanel);
+        closePanelBtn.onClick.AddListener(closePanel);
     }
 
     private void Update()
@@ -57,7 +65,19 @@ public class DailyReward : MonoBehaviour
             r += (secondsLeft % 60).ToString("00") + "s"; ;
 
             RewardTimer.text = r;
+            RewartTimerTextMenu.text = r;
         }
+    }
+
+    public void openPanel()
+    {
+        RewardPanel.SetActive(true);
+        bgPanel.SetActive(true);
+    }
+    public void closePanel()
+    {
+        RewardPanel.SetActive(false);
+        bgPanel.SetActive(false);
     }
 
     private bool isRewardReady()
@@ -69,6 +89,7 @@ public class DailyReward : MonoBehaviour
         if (secondsLeft <= 0)
         {
             RewardTimer.text = "Now!";
+            RewartTimerTextMenu.text = "Now!";
             return true;
         }
 
@@ -84,6 +105,6 @@ public class DailyReward : MonoBehaviour
         GameObject.Find("ShopManager").GetComponent<Shop>().ShowTricoins();
         GameObject.Find("ShopManager").GetComponent<Shop>().SaveProfile();
 
-        RewardPanel.SetActive(false);
+        closePanel();
     }
 }

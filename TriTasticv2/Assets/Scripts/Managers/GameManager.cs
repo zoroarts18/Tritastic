@@ -95,6 +95,9 @@ public class GameManager : MonoBehaviour
     public Text ProfileRingsCatchedTxt;
     public Text ProfileShootMatchesTxt;
     public Text ProfileShootKillsTxt;
+    public Text ShootUpgradePriceTxt;
+    public Text BoostUpgradePriceTxt;
+    public Text TricoinsUpgradePriceTxt;
 
     //------------------------------------------------------------------------------------------------------
     [Header("Profile Ints")]
@@ -102,6 +105,7 @@ public class GameManager : MonoBehaviour
     public int BlocksAvoidedThisRound;
     public int ShootKillsThisRound;
 
+    public int[] UpgradePrices;
     //------------------------------------------------------------------------------------------------------
     [Header("Important for Changing Colors")]
     public SpriteRenderer BackGroundImg;
@@ -117,7 +121,7 @@ public class GameManager : MonoBehaviour
     public GameObject adManager;
 
     public Button ShowLeaderBoardBtn;
-    public bool isConnectedToGooglePlayServices;
+    public static bool isConnectedToGooglePlayServices = false;
     public Button ReviveByWatchingAdButton;
 
     private string ShareMessage;
@@ -171,12 +175,17 @@ public class GameManager : MonoBehaviour
         UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
         UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
         UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
-        SignInToGooglePlayServices();
+
+        if(isConnectedToGooglePlayServices == false) SignInToGooglePlayServices();
+
+        ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount].ToString();
+        BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount].ToString();
+        TricoinsUpgradePriceTxt.text = UpgradePrices[playerProfile.TricoinsUpgradeCount].ToString();
     }
 
     public void SignInToGooglePlayServices()
     {
-        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptAlways, (result) =>
+        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
         {
             Debug.Log("PlayGamesPlatform Authenticate returned status code " + (int)result + ": " + result.ToString());
             switch (result)
@@ -184,23 +193,56 @@ public class GameManager : MonoBehaviour
                 case SignInStatus.Success:
                     {
                         isConnectedToGooglePlayServices = true;
+                        Debug.LogError("Sign in Success");
                         break;
                     }
-                default:
+                case SignInStatus.Failed:
                     {
                         isConnectedToGooglePlayServices = false;
+                        Debug.LogError("Sign in Failed");
                         break;
                     }
+                case SignInStatus.NotAuthenticated:
+                    {
+                        isConnectedToGooglePlayServices = false;
+                        Debug.LogError("Not Authenticated");
+                        break;
+                    }
+                case SignInStatus.DeveloperError:
+                    {
+                        isConnectedToGooglePlayServices = false;
+                        Debug.LogError("Developer Error on Sign In");
+                        break;
+                    }
+                case SignInStatus.Canceled:
+                    {
+                        isConnectedToGooglePlayServices = false;
+                        Debug.LogError("Sign In Canceled");
+                        break;
+                    }
+                case SignInStatus.NetworkError:
+                    {
+                        isConnectedToGooglePlayServices = false;
+                        Debug.LogError("Network Error on Sign In");
+                        break;
+                    }
+                case SignInStatus.AlreadyInProgress:
+                    {
+                        Debug.LogError("Sign in already in Progress!");
+                        break;
+                    }
+
             }
         });
     }
     //SFX:
     public void UpgradeShootAbility()
     {
-        if(playerProfile.ShootUpgradeCount <10)
+        if(playerProfile.ShootUpgradeCount <10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.ShootUpgradeCount])
         {
             playerProfile.ShootUpgrade += 0.5f;
             playerProfile.ShootUpgradeCount++;
+            playerProfile.Tricoins -= UpgradePrices[playerProfile.ShootUpgradeCount];
             UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
             SaveManager.Save();
         }
@@ -208,20 +250,22 @@ public class GameManager : MonoBehaviour
     }
     public void UpgradeBoostAbility()
     {
-        if(playerProfile.BoostUpgradeCount <10)
+        if(playerProfile.BoostUpgradeCount <10 && playerProfile.Tricoins>= UpgradePrices[playerProfile.BoostUpgradeCount])
         {
             playerProfile.BoostUpgrade += 0.5f;
             playerProfile.BoostUpgradeCount++;
+            playerProfile.Tricoins -= UpgradePrices[playerProfile.BoostUpgradeCount];
             UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
             SaveManager.Save();
         }
     }
     public void UpgradeEarnings()
     {
-        if(playerProfile.TricoinsUpgradeCount < 10)
+        if(playerProfile.TricoinsUpgradeCount < 10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.TricoinsUpgradeCount])
         {
             playerProfile.TricoinsUpgrade += 1;
             playerProfile.TricoinsUpgradeCount++;
+            playerProfile.Tricoins -= UpgradePrices[playerProfile.TricoinsUpgradeCount];
             UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
             SaveManager.Save();
         }
@@ -530,7 +574,7 @@ public class GameManager : MonoBehaviour
 
     public void clickShareButton()
     {
-        ShareMessage = "Holy Shit! I just scored " + score.ToString() + " points in my favourite mobile game: Tritastic! Can you beat me?";
+        ShareMessage = "WOW! I just scored " + score.ToString() + " points in my favourite mobile game: Tritastic! Can you beat me?";
         StartCoroutine(TakeScreenshotAndShare());
     }
 
@@ -599,6 +643,7 @@ public class GameManager : MonoBehaviour
                     Social.ReportScore(score, GPGSIds.leaderboard_highscore, (success) =>
                     {
                         if (!success) Debug.LogError("HighScore could not be posted");
+                        if (success) Debug.LogError("HighScore posted");
                     });
                 }
             }
