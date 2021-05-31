@@ -19,6 +19,7 @@ public class PlayerProfile
         
     }
     public int Tricoins;
+    public int dailyRewardDayCount; 
 
     public int HighScoreArcade;
     public int HighScoreRings;

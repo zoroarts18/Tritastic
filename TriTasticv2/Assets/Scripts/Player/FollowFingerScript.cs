@@ -75,6 +75,7 @@ public class FollowFingerScript : MonoBehaviour
     public bool isDashing = false;
     public bool touchDetected;
     public bool isDead;
+    public bool isInvincible = false;
 
     private Vector3 mousePos;
 
@@ -297,8 +298,9 @@ public class FollowFingerScript : MonoBehaviour
 
     public void revive()
     {
+        isInvincible = true;
         playerTrail.SetActive(true);
-        Destroy(TodesBlock);
+        if(TodesBlock != null) Destroy(TodesBlock);
         UIManager.GetComponent<UIMovement>().ingameUI.gameObject.SetActive(true);
         isDead = false;
         gameManager.GameIsPlayed = true;
@@ -368,6 +370,7 @@ public class FollowFingerScript : MonoBehaviour
 
         yield return new WaitForSeconds(0.4f);
 
+        isInvincible = false;
         GetComponent<SpriteRenderer>().enabled = true;
         GetComponent<PolygonCollider2D>().enabled = true;
     }

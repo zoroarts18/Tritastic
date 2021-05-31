@@ -61,8 +61,8 @@ public class DestroyBlock : MonoBehaviour
         {
             if(BG.muted == false) FindObjectOfType<AudioManager>().Play("Block Explosion");
 
-            if(playersSkin <= 4) Instantiate(ownDeathPart[playerBG], transform.position, Quaternion.identity);
-
+            
+            if (playersSkin <= 4) Instantiate(ownDeathPart[playerBG], transform.position, Quaternion.identity);
             else Instantiate(ownDeathPartEventSkins[playersSkin], transform.position, Quaternion.identity);
             Instantiate(plus1, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
             Destroy(this.gameObject);
@@ -92,7 +92,7 @@ public class DestroyBlock : MonoBehaviour
         if(transform.position.y < - 7f)
         {
             //----------------------------------------------------------------------------Shoot Modus----------------------------------------------------------------------------------------
-            if (gameManager.GameMode == 2)
+            if (gameManager.GameMode == 2 && !Player.GetComponent<FollowFingerScript>().isInvincible)
             {
                 if (BG.muted == false) Handheld.Vibrate();
                 //-------------------------------------------------------------------------Player Dead:--------------------------------------------------------------------------------------
@@ -100,13 +100,15 @@ public class DestroyBlock : MonoBehaviour
                 {
                     Player.GetComponent<FollowFingerScript>().isDead = true;
                     Instantiate(playerDeathPart[playersSkin], Player.transform.position, Quaternion.identity);
-                    Player.SetActive(false);
+                    Player.GetComponent<SpriteRenderer>().enabled = false;
+                    Player.GetComponent<PolygonCollider2D>().enabled = false;
+                    //Player.SetActive(false);
                     FindObjectOfType<GameManager>().EndGame();
                 }
             }
 
             //----------------------------------------------------------------------------Ring Modus----------------------------------------------------------------------------------------
-            if(this.transform.gameObject.tag == "Rings" )
+            if(this.transform.gameObject.tag == "Rings" && !Player.GetComponent<FollowFingerScript>().isInvincible)
             {
                 //------------------------------------------------------------------Ring nicht eingesammelt:--------------------------------------------------------------------------------
                 if(ringCatched == false)
@@ -119,9 +121,13 @@ public class DestroyBlock : MonoBehaviour
                     //--------------------------------------------------------------------Player Dead:----------------------------------------------------------------------------------------
                     if (Player.GetComponent<FollowFingerScript>().isDead == false)
                     {
+                        
                         Player.GetComponent<FollowFingerScript>().isDead = true;
+                        Debug.LogError(playersSkin);
+                        Debug.LogError(playerDeathPart[playersSkin]);
                         Instantiate(playerDeathPart[playersSkin], Player.transform.position, Quaternion.identity);
-                        Player.SetActive(false);
+                        Player.GetComponent<SpriteRenderer>().enabled = false;
+                        Player.GetComponent<PolygonCollider2D>().enabled = false;
                         FindObjectOfType<GameManager>().EndGame();
                     }     
                 }

@@ -160,6 +160,7 @@ MonoBehaviour:
   - {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23, type: 3}
   - {fileID: 7179391177162850312, guid: 4d5d133f15a12314f845dab98ed821c7, type: 3}
   - {fileID: 7179391177162850312, guid: 939e2ad5bd0eef442ba2fab673240ff8, type: 3}
+  - {fileID: 7179391177162850312, guid: 939e2ad5bd0eef442ba2fab673240ff8, type: 3}
   - {fileID: 8815324226382805340, guid: a38ece69e93ab814d90439807a124730, type: 3}
   ownDeathPart:
   - {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23, type: 3}
@@ -167,12 +168,18 @@ MonoBehaviour:
   - {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23, type: 3}
   - {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23, type: 3}
   ownDeathPartEventSkins: []
-  WeihnachtsDeathVFX: {fileID: 0}
-  HalloweenDeathVFX: {fileID: 0}
-  SilvesterDeathVFX: {fileID: 0}
-  NormalBlockExplosion: {fileID: 0}
-  blueBlockExplosion: {fileID: 0}
-  GreenBlockExplosion: {fileID: 0}
+  WeihnachtsDeathVFX: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
+    type: 3}
+  HalloweenDeathVFX: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
+    type: 3}
+  SilvesterDeathVFX: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
+    type: 3}
+  NormalBlockExplosion: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
+    type: 3}
+  blueBlockExplosion: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
+    type: 3}
+  GreenBlockExplosion: {fileID: 5567262521234353074, guid: bd1b94c5ce4b6214c841b0e6d7c02d23,
+    type: 3}
   gameManager: {fileID: 0}
   life: 0
   ringCatched: 0

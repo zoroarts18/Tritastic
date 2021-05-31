@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
+    public bool Ostern, Halloween, Weihnachten, Silvester; 
     public PlayerProfile playerProfile;
     public GameObject Player;
     public GameObject gameManager;
@@ -55,6 +56,9 @@ public class Shop : MonoBehaviour
     private Dictionary<Skin, Button> skinSellButtons = new Dictionary<Skin, Button>();
     private Dictionary<Background, Button> backGroundSelectButtons = new Dictionary<Background, Button>();
     private Dictionary<Skin, int> skinPrices = new Dictionary<Skin, int>();
+
+    public GameObject OsterSkin, HalloweenSkin, WeihnachtenSkin, SilvesterSkin;
+
     void Start()
     {
         playerProfile = SaveManager.Load();
@@ -167,6 +171,22 @@ public class Shop : MonoBehaviour
         UpdateSkinCollection();
     }
 
+    public void DeactivateEventSkins()
+    {
+        if(!Ostern) OsterSkin.SetActive(false);
+        if(!Halloween) HalloweenSkin.SetActive(false);
+        if(!Weihnachten) WeihnachtenSkin.SetActive(false);
+        if(!Silvester) SilvesterSkin.SetActive(false);
+    }
+
+    public void checkForBoughtEventSkins()
+    {
+        if (SelectChristmasButton.gameObject.activeInHierarchy) WeihnachtenSkin.SetActive(true);
+        if (SelectEasterButton.gameObject.activeInHierarchy) OsterSkin.SetActive(true);
+        if (SelectHalloweenButton.gameObject.activeInHierarchy) HalloweenSkin.SetActive(true);
+        if (SelectNewYearButton.gameObject.activeInHierarchy) SilvesterSkin.SetActive(true);
+    }
+
     public void SelectSkin(Skin currentSkin)
     {
         //Hier werden lediglich die Buttons interactable und nicht interactable gemacht, damit sich die Farbe ändert (der selektierte wird grauer und nicht interactable)
@@ -181,7 +201,6 @@ public class Shop : MonoBehaviour
             playerProfile.savedCurrentSkin = currentSkin;
             SaveProfile();
         }
-        
     }
 
     public void UpdateSkinCollection()
@@ -198,6 +217,9 @@ public class Shop : MonoBehaviour
                 skinSelectButtons[s].gameObject.SetActive(false);
             }
         }
+
+        DeactivateEventSkins();
+        checkForBoughtEventSkins();
     }
 
     public void SaveProfile()

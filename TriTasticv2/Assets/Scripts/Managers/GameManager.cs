@@ -126,6 +126,8 @@ public class GameManager : MonoBehaviour
 
     private string ShareMessage;
     public Button shareBtn;
+    public Button ResetDataBtn;
+
     private void Awake()
     {
         PlayGamesPlatform.DebugLogEnabled = true;
@@ -143,6 +145,7 @@ public class GameManager : MonoBehaviour
         openSettingsButton.onClick.AddListener(openSettings);
         closeSettingsButton.onClick.AddListener(closeSettings);
         StartGameButton.onClick.AddListener(StartGame);
+        ResetDataBtn.onClick.AddListener(resetGame);
 
         openMenuButton.onClick.AddListener(openMenu);
         closeMenuButton.onClick.AddListener(closeMenu);
@@ -178,9 +181,10 @@ public class GameManager : MonoBehaviour
 
         if(isConnectedToGooglePlayServices == false) SignInToGooglePlayServices();
 
-        ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount].ToString();
-        BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount].ToString();
-        TricoinsUpgradePriceTxt.text = UpgradePrices[playerProfile.TricoinsUpgradeCount].ToString();
+        ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount+1].ToString();
+        BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount+1].ToString();
+        TricoinsUpgradePriceTxt.text = UpgradePrices[playerProfile.TricoinsUpgradeCount+1].ToString();
+
     }
 
     public void SignInToGooglePlayServices()
@@ -238,35 +242,47 @@ public class GameManager : MonoBehaviour
     //SFX:
     public void UpgradeShootAbility()
     {
-        if(playerProfile.ShootUpgradeCount <10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.ShootUpgradeCount])
+        if(playerProfile.ShootUpgradeCount <10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.ShootUpgradeCount+1])
         {
             playerProfile.ShootUpgrade += 0.5f;
             playerProfile.ShootUpgradeCount++;
             playerProfile.Tricoins -= UpgradePrices[playerProfile.ShootUpgradeCount];
+            GameObject.Find("ShopManager").GetComponent<Shop>().ShowTricoins();
             UpgradeShootAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.ShootUpgradeCount.ToString() + "/10";
+            ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount+1].ToString();
+            BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount+1].ToString();
+            TricoinsUpgradePriceTxt.text = UpgradePrices[playerProfile.TricoinsUpgradeCount+1].ToString();
             SaveManager.Save();
         }
         
     }
     public void UpgradeBoostAbility()
     {
-        if(playerProfile.BoostUpgradeCount <10 && playerProfile.Tricoins>= UpgradePrices[playerProfile.BoostUpgradeCount])
+        if(playerProfile.BoostUpgradeCount <10 && playerProfile.Tricoins>= UpgradePrices[playerProfile.BoostUpgradeCount+1])
         {
             playerProfile.BoostUpgrade += 0.5f;
             playerProfile.BoostUpgradeCount++;
             playerProfile.Tricoins -= UpgradePrices[playerProfile.BoostUpgradeCount];
+            GameObject.Find("ShopManager").GetComponent<Shop>().ShowTricoins();
             UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
+            ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount+1].ToString();
+            BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount+1].ToString();
+            TricoinsUpgradePriceTxt.text = UpgradePrices[playerProfile.TricoinsUpgradeCount+1].ToString();
             SaveManager.Save();
         }
     }
     public void UpgradeEarnings()
     {
-        if(playerProfile.TricoinsUpgradeCount < 10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.TricoinsUpgradeCount])
+        if(playerProfile.TricoinsUpgradeCount < 10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.TricoinsUpgradeCount+1])
         {
             playerProfile.TricoinsUpgrade += 1;
             playerProfile.TricoinsUpgradeCount++;
             playerProfile.Tricoins -= UpgradePrices[playerProfile.TricoinsUpgradeCount];
+            GameObject.Find("ShopManager").GetComponent<Shop>().ShowTricoins();
             UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
+            ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount+1].ToString();
+            BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount+1].ToString();
+            TricoinsUpgradePriceTxt.text = UpgradePrices[playerProfile.TricoinsUpgradeCount+1].ToString();
             SaveManager.Save();
         }
     }
@@ -595,21 +611,20 @@ public class GameManager : MonoBehaviour
         new NativeShare().AddFile(filePath).SetSubject("Tritastic").SetText (ShareMessage).Share();
     }
 
+    public void resetGame()
+    {
+        if(playerProfile != null)
+        {
+            SaveManager.ResetData();
+            SceneManager.LoadScene(0);
+        }
+    }
+
     public void EndGame()
     {
         //playerProfile = SaveManager.Load();
 
-        if(GameMode == 0)
-        {
-            ReviveByWatchingAdButton.gameObject.SetActive(true);
-        }
-
-        else
-        {
-            ReviveByWatchingAdButton.gameObject.SetActive(false);
-        }
-
-
+        ReviveByWatchingAdButton.gameObject.SetActive(true);
         playerProfile.ArcadeBlocksAvoided += BlocksAvoidedThisRound;
         playerProfile.RingsCatched += RingscatchedThisRound;
         playerProfile.ShootKills += ShootKillsThisRound;

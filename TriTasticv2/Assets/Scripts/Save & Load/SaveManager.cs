@@ -32,6 +32,56 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    public static void ResetData()
+    {
+        if(playerProfile != null)
+        {
+            //General
+            playerProfile.Tricoins = 0;
+            playerProfile.Quality = 1;
+            playerProfile.GameMode = 0;
+            playerProfile.savedCurrentSkin = Skin.Triangle;
+            playerProfile.currentBg = Background.SolidRed;
+
+            //------Arcade-------
+            playerProfile.HighScoreArcade = 0;
+            playerProfile.PowerUpsCollected = 0;
+            playerProfile.ArcadeMatchesPlayed = 0;
+            playerProfile.ArcadeBlocksAvoided = 0;
+
+            //------Rings---------
+            playerProfile.HighScoreRings = 0;
+            playerProfile.RingsMatchesPlayed = 0;
+            playerProfile.RingsCatched = 0;
+
+            //------Shoot---------
+            playerProfile.HighScoreShoot = 0;
+            playerProfile.ShootMatchesPlayed = 0;
+            playerProfile.ShootKills = 0;
+
+            //------Upgrades-------
+            playerProfile.ShootUpgrade = 0;
+            playerProfile.BoostUpgrade = 0;
+            playerProfile.TricoinsUpgrade = 0;
+
+            playerProfile.ShootUpgradeCount = 0;
+            playerProfile.BoostUpgradeCount = 0;
+            playerProfile.TricoinsUpgradeCount = 0;
+
+            //------Skins bought-----
+            playerProfile.skinPurchased[Skin.Triangle] = true;
+
+            playerProfile.skinPurchased[Skin.Jet] = false;
+            playerProfile.skinPurchased[Skin.Helicopter] = false;
+            playerProfile.skinPurchased[Skin.Motorrad] = false;
+            playerProfile.skinPurchased[Skin.Shuriken] = false;
+            playerProfile.skinPurchased[Skin.Easter] = false;
+            playerProfile.skinPurchased[Skin.Halloween] = false;
+            playerProfile.skinPurchased[Skin.Christmas] = false;
+            playerProfile.skinPurchased[Skin.NewYear] = false;
+        }
+    }
+
     public static PlayerProfile Load()
     {
         if (playerProfile != null)

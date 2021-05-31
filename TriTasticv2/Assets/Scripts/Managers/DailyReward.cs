@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class DailyReward : MonoBehaviour
 {
+    public int[] RewardsForDays;
+    public Text amount;
+    public Text CurrentDayText;
+    public PlayerProfile pp;
+
     public float msToWait = 5000;
     public Button claimRewardBtn;
     public Text RewardTimer;
@@ -21,12 +26,14 @@ public class DailyReward : MonoBehaviour
     public static bool RewardPanelShown = false;
     public void Start()
     {
+        pp = SaveManager.Load();
         if(!RewardPanelShown)
         {
             RewardPanelShown = true;
             openPanel();
         }
-
+        int currentDay = pp.dailyRewardDayCount + 1;
+        CurrentDayText.text = "Day " + currentDay.ToString();
         claimRewardBtn.onClick.AddListener(claimReward);
         lastRewardClaimed = ulong.Parse(PlayerPrefs.GetString("LastRewardClaimed"));
 
@@ -42,6 +49,8 @@ public class DailyReward : MonoBehaviour
 
     private void Update()
     {
+        amount.text = RewardsForDays[pp.dailyRewardDayCount].ToString() + " Tricoins";
+        
         if(!claimRewardBtn.interactable)
         {
             if(isRewardReady())
@@ -90,6 +99,7 @@ public class DailyReward : MonoBehaviour
         {
             RewardTimer.text = "Now!";
             RewartTimerTextMenu.text = "Now!";
+            claimRewardBtn.GetComponent<Animator>().SetTrigger("Ready");
             return true;
         }
 
@@ -104,7 +114,10 @@ public class DailyReward : MonoBehaviour
         GameObject.Find("ShopManager").GetComponent<Shop>().playerProfile.Tricoins += 20;
         GameObject.Find("ShopManager").GetComponent<Shop>().ShowTricoins();
         GameObject.Find("ShopManager").GetComponent<Shop>().SaveProfile();
-
+        claimRewardBtn.GetComponent<Animator>().SetTrigger("Done");
         closePanel();
+
+        if(pp.dailyRewardDayCount <= 4) pp.dailyRewardDayCount++;
+        SaveManager.Save();
     }
 }
