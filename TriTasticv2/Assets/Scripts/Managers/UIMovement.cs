@@ -15,6 +15,7 @@ public class UIMovement : MonoBehaviour
     public GameObject BuyMoreTricoinsPanel;
     public Animator BuyMoreTricoinsPanelAnim;
     public GameObject MoreTricoinsBGPanel;
+    public GameObject AchievementUI;
 
     void Start()
     {
@@ -56,6 +57,7 @@ public class UIMovement : MonoBehaviour
         ProfilePanel.SetActive(false);
         SettingsPanel.SetActive(false);
         MenuOptionsPanel.SetActive(true);
+        AchievementUI.SetActive(false);
     }
     public void closeMenu()
     {
@@ -63,6 +65,7 @@ public class UIMovement : MonoBehaviour
         ProfilePanel.SetActive(false);
         SettingsPanel.SetActive(false);
         MenuOptionsPanel.SetActive(true);
+        AchievementUI.SetActive(false);
     }
 
     //------------------------Profile Menu:--------------------------------------------------------------------------------------------------------
@@ -71,12 +74,31 @@ public class UIMovement : MonoBehaviour
         ProfilePanel.SetActive(true);
         SettingsPanel.SetActive(false);
         MenuOptionsPanel.SetActive(false);
+        AchievementUI.SetActive(false);
     }
     public void closeProfile()
     {
         ProfilePanel.SetActive(false);
         SettingsPanel.SetActive(false);
         MenuOptionsPanel.SetActive(true);
+        AchievementUI.SetActive(false);
+    }
+
+    //------------------------Achievement Menu:--------------------------------------------------------------------------------------------------------
+    public void openAchievements()
+    {
+        ProfilePanel.SetActive(false);
+        SettingsPanel.SetActive(false);
+        MenuOptionsPanel.SetActive(false);
+        AchievementUI.SetActive(true);
+    }
+
+    public void closeAchvievements()
+    {
+        ProfilePanel.SetActive(false);
+        SettingsPanel.SetActive(false);
+        MenuOptionsPanel.SetActive(true);
+        AchievementUI.SetActive(false);
     }
 
     //------------------------Shop Menu:--------------------------------------------------------------------------------------------------------

@@ -42,6 +42,10 @@ public class DailyReward : MonoBehaviour
             closePanel();
             claimRewardBtn.interactable = false;
         }
+        else
+        {
+            claimRewardBtn.GetComponent<Animator>().SetTrigger("Ready");
+        }
 
         openPanelBtn.onClick.AddListener(openPanel);
         closePanelBtn.onClick.AddListener(closePanel);
@@ -49,6 +53,8 @@ public class DailyReward : MonoBehaviour
 
     private void Update()
     {
+        pp.dailyRewardDayCount = Mathf.Clamp(pp.dailyRewardDayCount, 0, 4);
+
         amount.text = RewardsForDays[pp.dailyRewardDayCount].ToString() + " Tricoins";
         
         if(!claimRewardBtn.interactable)
@@ -82,6 +88,7 @@ public class DailyReward : MonoBehaviour
     {
         RewardPanel.SetActive(true);
         bgPanel.SetActive(true);
+        if(isRewardReady()) claimRewardBtn.GetComponent<Animator>().SetTrigger("Ready");
     }
     public void closePanel()
     {
@@ -108,16 +115,16 @@ public class DailyReward : MonoBehaviour
 
     public void claimReward()
     {
+        claimRewardBtn.interactable = false;
         lastRewardClaimed = (ulong)DateTime.Now.Ticks;
         PlayerPrefs.SetString("LastRewardClaimed", lastRewardClaimed.ToString());
-        claimRewardBtn.interactable = false;
         GameObject.Find("ShopManager").GetComponent<Shop>().playerProfile.Tricoins += 20;
         GameObject.Find("ShopManager").GetComponent<Shop>().ShowTricoins();
         GameObject.Find("ShopManager").GetComponent<Shop>().SaveProfile();
         claimRewardBtn.GetComponent<Animator>().SetTrigger("Done");
         closePanel();
-
-        if(pp.dailyRewardDayCount <= 4) pp.dailyRewardDayCount++;
+        pp.Tricoins += RewardsForDays[pp.dailyRewardDayCount];
+        if (pp.dailyRewardDayCount <= 3) pp.dailyRewardDayCount++;
         SaveManager.Save();
     }
 }

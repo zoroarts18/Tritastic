@@ -11,7 +11,8 @@ public class Shop : MonoBehaviour
     public GameObject Player;
     public GameObject gameManager;
     public GameObject AdManager;
-
+    public AchievementManager am;
+    public PlayGames pg;
     public Text TricoinsInShop;
 
     [Header("Buy Buttons Skins")]
@@ -230,12 +231,18 @@ public class Shop : MonoBehaviour
     public void ShowTricoins()
     {
         TricoinsInShop.text = playerProfile.Tricoins.ToString();
+        if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+        if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
     }
 
     public void BuySkin(Skin skin)
     {
         if (playerProfile.Tricoins >= skinPrices[skin])
         {
+            PlayerPrefs.SetInt("Skins", PlayerPrefs.GetInt("Skins", 1) + 1);
+            if(PlayerPrefs.GetInt("Skins", 1) >= 5) am.showAchievement("Shop Junkie");
+
+            am.showAchievement("Shop Tastic");
             SelectSkin(skin);
             playerProfile.Tricoins -= skinPrices[skin];
             //Der Bool wird auf true gesetzt, der Skin wird so in dem PlayerProfile gespeichert
@@ -259,6 +266,7 @@ public class Shop : MonoBehaviour
 
     public void SellSkin(Skin skin)
     {
+        am.showAchievement("This Sucks");
         playerProfile.Tricoins += skinPrices[skin] / 2;
         if (skin == playerProfile.savedCurrentSkin) SelectSkin(Skin.Triangle);
         //Der Bool wird auf false gesetzt, weil der SKin nun nicht mehr im Besitz ist und nicht mehr gespeichert werden soll

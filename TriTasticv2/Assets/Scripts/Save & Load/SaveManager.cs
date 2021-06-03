@@ -39,6 +39,7 @@ public class SaveManager : MonoBehaviour
             //General
             playerProfile.Tricoins = 0;
             playerProfile.Quality = 1;
+            playerProfile.dailyRewardDayCount = 0;
             playerProfile.GameMode = 0;
             playerProfile.savedCurrentSkin = Skin.Triangle;
             playerProfile.currentBg = Background.SolidRed;

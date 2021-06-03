@@ -11,6 +11,8 @@ public class FollowFingerScript : MonoBehaviour
     private Rigidbody2D rb;
     public SpriteRenderer sr;
     public Animator PlayerAnim;
+    public GameObject[] ZusatzSprites;
+
 
     [Header("Skins")]
     public Sprite[] skins;
@@ -275,12 +277,14 @@ public class FollowFingerScript : MonoBehaviour
 
     public void Death()
     {
+        HeliFlügel.SetActive(false);
         playerTrail.SetActive(false);
         isDead = true;
         shake.camShake();
         //this.gameObject.SetActive(false);
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<PolygonCollider2D>().enabled = false;
+
         GameObject playerDeathParticles = Instantiate(DeathParticles[(int)currentSkin], new Vector2(transform.position.x, transform.position.y - 0.2f), Quaternion.identity);
         playerDeathParticles.tag = "Particles";
 

@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-using UnityEngine.SocialPlatforms;
+
 
 
 public class GameManager : MonoBehaviour
@@ -36,6 +35,9 @@ public class GameManager : MonoBehaviour
     public BackGroundMusicManagement BG;
     public UIMovement ui;
     public AudioManager audio;
+    public Shop shop;
+    public PlayGames pg;
+    public AchievementManager am;
 
     //------------------------------------------------------------------------------------------------------
     [Header("GameOver & Restart")]
@@ -73,6 +75,7 @@ public class GameManager : MonoBehaviour
     public Button closeMoreTricoinsPanelBtn;
     public Button openMenuButton;
     public Button closeMenuButton;
+    public Button closeAchievementsBtn;
     public Button openProfileButton;
     public Button closeProfileButton;
     public Button openSettingsButton;
@@ -120,6 +123,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject adManager;
 
+    public Button ShowAchievementsBtn;
     public Button ShowLeaderBoardBtn;
     public static bool isConnectedToGooglePlayServices = false;
     public Button ReviveByWatchingAdButton;
@@ -128,11 +132,12 @@ public class GameManager : MonoBehaviour
     public Button shareBtn;
     public Button ResetDataBtn;
 
-    private void Awake()
-    {
-        PlayGamesPlatform.DebugLogEnabled = true;
-        PlayGamesPlatform.Activate();
-    }
+    public Button RateGameToGetTricoins;
+    public Button FollowInstagramToGetTricoinsBtn, FollowTwitterToGetTricoinsBtn, FollowYoutubeToGetTricoinsBtn;
+
+    public GameObject[] PlayerComponentsToDeactivate;
+
+
     void Start()
     {
         Time.timeScale = 1;
@@ -146,6 +151,8 @@ public class GameManager : MonoBehaviour
         closeSettingsButton.onClick.AddListener(closeSettings);
         StartGameButton.onClick.AddListener(StartGame);
         ResetDataBtn.onClick.AddListener(resetGame);
+        ShowAchievementsBtn.onClick.AddListener(ShowAchievementsFunc);
+        closeAchievementsBtn.onClick.AddListener(closeAchievementFunc);
 
         openMenuButton.onClick.AddListener(openMenu);
         closeMenuButton.onClick.AddListener(closeMenu);
@@ -162,6 +169,10 @@ public class GameManager : MonoBehaviour
         UpgradeEarningsButton.onClick.AddListener(UpgradeEarnings);
         ShowLeaderBoardBtn.onClick.AddListener(openLeaderboard);
         shareBtn.onClick.AddListener(clickShareButton);
+        RateGameToGetTricoins.onClick.AddListener(RateGame);
+        FollowInstagramToGetTricoinsBtn.onClick.AddListener(followInstagram);
+        FollowTwitterToGetTricoinsBtn.onClick.AddListener(followTwitter);
+        FollowYoutubeToGetTricoinsBtn.onClick.AddListener(followYoutube);
 
         blockSpawner.currentSpeed = startSpeed;
         playerProfile = SaveManager.Load();
@@ -179,7 +190,7 @@ public class GameManager : MonoBehaviour
         UpgradeBoostAbilityButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.BoostUpgradeCount.ToString() + "/10";
         UpgradeEarningsButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = playerProfile.TricoinsUpgradeCount.ToString() + "/10";
 
-        if(isConnectedToGooglePlayServices == false) SignInToGooglePlayServices();
+        //if(isConnectedToGooglePlayServices == false) SignInToGooglePlayServices();
 
         ShootUpgradePriceTxt.text = UpgradePrices[playerProfile.ShootUpgradeCount+1].ToString();
         BoostUpgradePriceTxt.text = UpgradePrices[playerProfile.BoostUpgradeCount+1].ToString();
@@ -187,8 +198,53 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void ShowAchievementsFunc()
+    {
+        selectSound();
+        ui.openAchievements();
+        am.CheckForUnlockedAchievments();
+    }
+    public void closeAchievementFunc()
+    {
+        selectSound();
+        ui.closeAchvievements();
+    }
+    public void followTwitter()
+    {
+        Application.OpenURL("https://twitter.com/Zoroarts_Dev");
+        playerProfile.Tricoins += 20;
+        SaveManager.Save();
+        shop.ShowTricoins();
+        am.showAchievement("Follower");
+    }
+    public void followInstagram()
+    {
+        Application.OpenURL("https://www.instagram.com/zoroarts18/");
+        playerProfile.Tricoins += 20;
+        SaveManager.Save();
+        shop.ShowTricoins();
+        am.showAchievement("Follower");
+    }
+    public void followYoutube()
+    {
+        Application.OpenURL("https://www.youtube.com/channel/UCwYSfJQbbUV8dw_JtkbD3ZA");
+        playerProfile.Tricoins += 20;
+        SaveManager.Save();
+        shop.ShowTricoins();
+        am.showAchievement("Follower");
+    }
+    public void RateGame()
+    {
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.ZoroDev.TriTastic");
+        playerProfile.Tricoins += 50;
+        SaveManager.Save();
+        shop.ShowTricoins();
+        am.showAchievement("Follower");
+    }
+
     public void SignInToGooglePlayServices()
     {
+        /*
         PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
         {
             Debug.Log("PlayGamesPlatform Authenticate returned status code " + (int)result + ": " + result.ToString());
@@ -237,13 +293,16 @@ public class GameManager : MonoBehaviour
                     }
 
             }
+        
         });
+        */
     }
     //SFX:
     public void UpgradeShootAbility()
     {
         if(playerProfile.ShootUpgradeCount <10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.ShootUpgradeCount+1])
         {
+            am.showAchievement("Upgrade");
             playerProfile.ShootUpgrade += 0.5f;
             playerProfile.ShootUpgradeCount++;
             playerProfile.Tricoins -= UpgradePrices[playerProfile.ShootUpgradeCount];
@@ -260,6 +319,7 @@ public class GameManager : MonoBehaviour
     {
         if(playerProfile.BoostUpgradeCount <10 && playerProfile.Tricoins>= UpgradePrices[playerProfile.BoostUpgradeCount+1])
         {
+            am.showAchievement("Upgrade");
             playerProfile.BoostUpgrade += 0.5f;
             playerProfile.BoostUpgradeCount++;
             playerProfile.Tricoins -= UpgradePrices[playerProfile.BoostUpgradeCount];
@@ -275,6 +335,7 @@ public class GameManager : MonoBehaviour
     {
         if(playerProfile.TricoinsUpgradeCount < 10 && playerProfile.Tricoins >= UpgradePrices[playerProfile.TricoinsUpgradeCount+1])
         {
+            am.showAchievement("Upgrade");
             playerProfile.TricoinsUpgrade += 1;
             playerProfile.TricoinsUpgradeCount++;
             playerProfile.Tricoins -= UpgradePrices[playerProfile.TricoinsUpgradeCount];
@@ -417,7 +478,6 @@ public class GameManager : MonoBehaviour
         selectSound();
         ui.moveShopOut();
     }
-
     public void openMoreTricoinsPanel()
     {
         selectSound();
@@ -475,6 +535,20 @@ public class GameManager : MonoBehaviour
     {
         selectSound();
         ui.closeSettings();
+    }
+
+    //--------------------------------------------------------Achievements:------------------------------------------------------------------------
+
+    public void openAchievementPanel()
+    {
+        selectSound();
+        ui.openAchievements();
+    }
+
+    public void closeAchvievementPanel()
+    {
+        selectSound();
+        ui.closeAchvievements();
     }
 
 
@@ -585,15 +659,13 @@ public class GameManager : MonoBehaviour
     }
     public void openLeaderboard()
     {
-        Social.ShowLeaderboardUI();
+        pg.ShowLeaderboard();
     }
-
     public void clickShareButton()
     {
         ShareMessage = "WOW! I just scored " + score.ToString() + " points in my favourite mobile game: Tritastic! Can you beat me?";
         StartCoroutine(TakeScreenshotAndShare());
     }
-
     private IEnumerator TakeScreenshotAndShare()
     {
         yield return new WaitForEndOfFrame();
@@ -609,22 +681,29 @@ public class GameManager : MonoBehaviour
         Destroy(ss);
 
         new NativeShare().AddFile(filePath).SetSubject("Tritastic").SetText (ShareMessage).Share();
-    }
 
+        am.showAchievement("Share It");
+        if(PlayerPrefs.GetInt("SharedScreenshots", 0) >= 5) am.showAchievement("Weird Flex");
+        PlayerPrefs.SetInt("SharedScreenshots", PlayerPrefs.GetInt("SharedScreenshots", 0) + 1);
+    }
     public void resetGame()
     {
+        PlayerPrefs.DeleteAll();
         if(playerProfile != null)
         {
             SaveManager.ResetData();
             SceneManager.LoadScene(0);
         }
     }
-
     public void EndGame()
     {
         //playerProfile = SaveManager.Load();
+        foreach (var item in PlayerComponentsToDeactivate)
+        {
+            item.SetActive(false);
+        }
 
-        ReviveByWatchingAdButton.gameObject.SetActive(true);
+        //ReviveByWatchingAdButton.gameObject.SetActive(true);
         playerProfile.ArcadeBlocksAvoided += BlocksAvoidedThisRound;
         playerProfile.RingsCatched += RingscatchedThisRound;
         playerProfile.ShootKills += ShootKillsThisRound;
@@ -633,34 +712,33 @@ public class GameManager : MonoBehaviour
         
         if (GameMode == 0)
         {
+            if (score == 0) am.showAchievement("Noob");
             playerProfile.ArcadeMatchesPlayed++;
             if(playerProfile.TricoinsUpgrade == 0)
             {
                 int TricoinsFromCurrentRound = score / 10;
+                TricoinsFromCurrentRound *= 2;
                 TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
                 playerProfile.Tricoins += TricoinsFromCurrentRound;
+                if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+                if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
             }
 
             else
             {
                 int TricoinsFromCurrentRound = score / (11 - playerProfile.TricoinsUpgrade);
+                TricoinsFromCurrentRound *= 2;
                 TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
                 playerProfile.Tricoins += TricoinsFromCurrentRound;
+                if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+                if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
             }
             
             if (score > playerProfile.HighScoreArcade)
             {
                 playerProfile.HighScoreArcade = score;
                 HighScoreTxtGameOver.text = score.ToString();
-
-                if(isConnectedToGooglePlayServices == true)
-                {
-                    Social.ReportScore(score, GPGSIds.leaderboard_highscore, (success) =>
-                    {
-                        if (!success) Debug.LogError("HighScore could not be posted");
-                        if (success) Debug.LogError("HighScore posted");
-                    });
-                }
+                pg.AddScoreToLeaderboard(score);
             }
 
             else HighScoreTxtGameOver.text = playerProfile.HighScoreArcade.ToString();
@@ -671,7 +749,31 @@ public class GameManager : MonoBehaviour
         }
         if (GameMode == 1)
         {
+            
             playerProfile.RingsMatchesPlayed++;
+            if (playerProfile.TricoinsUpgrade == 0)
+            {
+                int TricoinsFromCurrentRound = score / 10;
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsFromCurrentRound *= 2;
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
+                playerProfile.Tricoins += TricoinsFromCurrentRound;
+                if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+                if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
+            }
+
+            else
+            {
+                int TricoinsFromCurrentRound = score / (11 - playerProfile.TricoinsUpgrade);
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsFromCurrentRound *= 2;
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
+                playerProfile.Tricoins += TricoinsFromCurrentRound;
+                if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+                if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
+            }
 
             if (score > playerProfile.HighScoreRings)
             {
@@ -687,6 +789,30 @@ public class GameManager : MonoBehaviour
         if (GameMode == 2)
         {
             playerProfile.ShootMatchesPlayed++;
+
+            if (playerProfile.TricoinsUpgrade == 0)
+            {
+                int TricoinsFromCurrentRound = score / 10;
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsFromCurrentRound *= 2;
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
+                playerProfile.Tricoins += TricoinsFromCurrentRound;
+                if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+                if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
+            }
+
+            else
+            {
+                int TricoinsFromCurrentRound = score / (11 - playerProfile.TricoinsUpgrade);
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsFromCurrentRound *= 2;
+                Debug.LogError(TricoinsFromCurrentRound);
+                TricoinsTextGameOver.text = TricoinsFromCurrentRound.ToString();
+                playerProfile.Tricoins += TricoinsFromCurrentRound;
+                if (playerProfile.Tricoins >= 500) am.showAchievement("Rich Kid");
+                if (playerProfile.Tricoins >= 1000) am.showAchievement("Too Rich??");
+            }
 
             if (score > playerProfile.HighScoreShoot)
             {
@@ -723,6 +849,10 @@ public class GameManager : MonoBehaviour
         else if (GameMode == 1) RingscatchedThisRound++;
         else if (GameMode == 2) ShootKillsThisRound++;
 
+        if(GameMode == 0 && score >= 100) am.showAchievement("Small steps");
+        if (GameMode == 0 && score >= 200) am.showAchievement("God Mode");
+        if(GameMode == 1 && score >= 100) am.showAchievement("Catch God");
+        if (GameMode == 2 && score >= 100) am.showAchievement("Shooter God");
 
         //SaveManager.Save();
     }
